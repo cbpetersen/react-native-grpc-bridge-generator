@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`creates multiple service sample output 1`] = `
+"RCT_EXPORT_METHOD(SearchPlacesRequest:(SearchPlacesRequest *)req
+  resolver:(RCTPromiseResolveBlock) resolve
+  rejecter:(RCTPromiseRejectBlock) reject) {
+  [_service SearchPlacesRequest:req handler:^(Places *response, NSError *error) {
+    if (error) {
+      reject([@(error.code) stringValue], error.description, error);
+    return;
+  }
+  NSLog(@\\"native SearchPlaces: %@\\", response);
+    @\\"Locations\\": NSMutableArray *x = [[NSMutableArray alloc] init];
+for (Location *l in response.Locations) {
+    [x addObject: @{
+    @\\"lat\\": @(response.lat),
+    @\\"lng\\": @(response.lng),
+    @\\"addressString\\": @response.addressString ?: [NSNull null],
+}
+}
+  resolve(x);
+}
+RCT_EXPORT_METHOD(SearchLocationsRequest:(SearchLocationsRequest *)req
+  resolver:(RCTPromiseResolveBlock) resolve
+  rejecter:(RCTPromiseRejectBlock) reject) {
+  [_service SearchLocationsRequest:req handler:^(Location *response, NSError *error) {
+    if (error) {
+      reject([@(error.code) stringValue], error.description, error);
+    return;
+  }
+  NSLog(@\\"native SearchLocations: %@\\", response);
+  resolve(@{ 
+    @\\"lat\\": @(response.lat),
+    @\\"lng\\": @(response.lng),
+    @\\"addressString\\": @response.addressString ?: [NSNull null],
+  });
+}"
+`;
+
+exports[`creates nested sample output 1`] = `
+"RCT_EXPORT_METHOD(SearchPlacesRequest:(SearchPlacesRequest *)req
+  resolver:(RCTPromiseResolveBlock) resolve
+  rejecter:(RCTPromiseRejectBlock) reject) {
+  [_service SearchPlacesRequest:req handler:^(Places *response, NSError *error) {
+    if (error) {
+      reject([@(error.code) stringValue], error.description, error);
+    return;
+  }
+  NSLog(@\\"native SearchPlaces: %@\\", response);
+    @\\"Locations\\": NSMutableArray *x = [[NSMutableArray alloc] init];
+for (Location *l in response.Locations) {
+    [x addObject: @{
+    @\\"lat\\": @(response.lat),
+    @\\"lng\\": @(response.lng),
+    @\\"addressString\\": @response.addressString ?: [NSNull null],
+}
+}
+  resolve(x);
+}"
+`;
+
+exports[`creates sample output 1`] = `
+"RCT_EXPORT_METHOD(ReverseGeocodeRequest:(ReverseGeocodeRequest *)req
+  resolver:(RCTPromiseResolveBlock) resolve
+  rejecter:(RCTPromiseRejectBlock) reject) {
+  [_service ReverseGeocodeRequest:req handler:^(Location *response, NSError *error) {
+    if (error) {
+      reject([@(error.code) stringValue], error.description, error);
+    return;
+  }
+  NSLog(@\\"native ReverseGeocode: %@\\", response);
+  resolve(@{ 
+    @\\"lat\\": @(response.lat),
+    @\\"lng\\": @(response.lng),
+    @\\"addressString\\": @response.addressString ?: [NSNull null],
+  });
+}"
+`;

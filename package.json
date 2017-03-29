@@ -1,0 +1,29 @@
+{
+  "name": "protobuf-to-react-native-bridge-bindings",
+  "version": "0.0.1",
+  "description": "tool to create bridges for react native from proto files",
+  "main": "index.js",
+  "scripts": {
+    "start": "babel-watch index.js",
+    "test": "jest",
+    "lint": "standard --verbose | snazzy",
+    "standard-fix": "standard --fix"
+  },
+  "author": "Christoffer Bo Petersen",
+  "license": "MIT",
+  "dependencies": {
+    "protocol-buffers-schema": "^3.1.1",
+    "yargs": "^7.0.2"
+  },
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.24.0",
+    "babel-core": "^6.24.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "babel-watch": "^2.0.6",
+    "jest": "^19.0.2",
+    "snazzy": "^6.0.0",
+    "standard": "^9.0.2"
+  }
+}

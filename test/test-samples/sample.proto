@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package api.grpc;
+
+service GrpcService {
+    rpc ReverseGeocode(ReverseGeocodeRequest) returns (Location) {}
+}
+
+message ReverseGeocodeRequest {
+    double lat = 1;
+    double lng = 2;
+}
+
+message Location {
+    double lat = 1;
+    double lng = 2;
+    string addressString = 3;
+}
