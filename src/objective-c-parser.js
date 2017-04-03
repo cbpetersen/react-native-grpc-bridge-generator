@@ -25,95 +25,113 @@ const indent = (length) => {
   return ''.padStart(length)
 }
 
-const generateFieldOutput = (field, schema) => {
+const generateFieldOutput = (field, schema, fieldPath, indention, index, length) => {
+  const append = isLast(index, length) ? '' : ','
+  const debug = `// islast field: ${isLast(index, length)}`
+
   if (primitiveTypes.some(type => type === field.type)) {
       if (field.type === 'string') {
-        return `@"${field.name}": @response.${field.name} ?: [NSNull null],`
+        return `${indent(indention)}@"${field.name}": ${fieldPath}.${field.name} ?: [NSNull null]${append} ${debug}`
 
       }
 
-      return `@"${field.name}": @(response.${field.name}),`
+      return `${indent(indention)}@"${field.name}": @(${fieldPath}.${field.name})${append} ${debug}`
   }
 
   // TODO: else find type
-  console.log(field)
-  return `@"${field.name}": ${generateNonPrimitiveTypeOutput(field, schema)}`
+  // console.log(field)
+  return `${indent(indention)}@"${field.name}": ${generateNonPrimitiveTypeOutput(field, schema, fieldPath, indention, index, length)}`
 }
 
-const generateNonPrimitiveTypeOutput = (message, schema) => {
+const generateNonPrimitiveTypeOutput = (message, schema, fieldPath, indention, index, length) => {
   const output = []
   var output_type = schema.messages.find(x => x.name === message.type)
 
   if (message.repeated) {
     output.push(`NSMutableArray *x = [[NSMutableArray alloc] init];`)
-    output.push(`for (${message.type} *l in response.${message.name}) {`)
+    output.push(`${indent(indention)}for (${message.type} *obj in response.${message.name}) {`)
 
     const repeatedOutputs = []
-    repeatedOutputs.push(`${indent(4)}[x addObject: @{`)
-    output_type.fields.forEach((field) => {
-      repeatedOutputs.push(`${indent(4)}${generateFieldOutput(field, schema)}`)
+    repeatedOutputs.push(`${indent(indention + 2)}[x addObject: @{`)
+    output_type.fields.forEach((field, innerIndex) => {
+      repeatedOutputs.push(`${indent(0)}${generateFieldOutput(field, schema, 'obj', indention + 4, innerIndex, output_type.fields.length)}`)
     }, this)
-    repeatedOutputs.push('}')
+    repeatedOutputs.push(`${indent(indention + 2)}};`)
+    repeatedOutputs.push(`${indent(indention)}}`)
+
     output.push(`${repeatedOutputs.join('\n')}`)
-    output.push(`}`)
+    output.push(`${indent(indention - 2)}}`)
+    output.push(``)
   }
   else {
-    output_type.fields.forEach((field) => {
-      output.push(`${indent(4)}${generateFieldOutput(field, schema)}`)
+    output.push(`@{`)
+    output_type.fields.forEach((field, innerIndex) => {
+      output.push(`${indent(0)}${generateFieldOutput(field, schema, fieldPath, indention +2, innerIndex, output_type.fields.length)}`)
     }, this)
-
+    if (isLast(index, length)) {
+      output.push(`${indent(indention)}}`)
+    } else {
+      output.push(`${indent(indention)}},`)
+    }
   }
 
   return output.join('\n')
 }
 
-const generateMethodOutput = (method, schema) => {
+const isLast = (index, length) => {
+  return index >= length - 1
+}
+
+const generateMessageOutput = (method, schema, indention) => {
   const output = []
   // console.log(method)
   var output_type = schema.messages.find(x => x.name === method.output_type)
   // console.log(output_type)
   // console.log(`output type: ${output_type}`)
+  const fieldPath = 'response'
   if (output_type.fields.some(field => field.repeated)) {
     if (output_type.fields.length === 1) {
-      output_type.fields.forEach((field) => {
-        output.push(`${indent(4)}${generateFieldOutput(field, schema)}`)
+      output_type.fields.forEach((field, index) => {
+        // output.push(`${indent(4)}${generateFieldOutput(field, schema, fieldPath, indention, index, output_type.fields.length)}`)
+        output.push(`${generateFieldOutput(field, schema, fieldPath, indention + 2, index, output_type.fields.length)}`)
       }, this)
-      output.push(`${indent(2)}resolve(x);`)
+      output.push(`${indent(indention)}resolve(x);`)
     } else {
       throw new Error('not supported yet')
     }
   } else {
-    output.push(`${indent(2)}resolve(@{ `)
-    output_type.fields.forEach((field) => {
-      output.push(`${indent(4)}${generateFieldOutput(field, schema)}`)
+    output.push(`${indent(indention)}resolve(@{ `)
+    output_type.fields.forEach((field, index) => {
+      output.push(`${generateFieldOutput(field, schema, fieldPath, indention + 2, index, output_type.fields.length)}`)
+      // output.push(`${indent(4)}${generateFieldOutput(field, schema, fieldPath, indention, index, output_type.fields.length)}`)
     }, this)
-    output.push(`${indent(2)}});`)
+    output.push(`${indent(indention)}});`)
   }
 
-
-
-  return output.join('\n')
+  return `${output.join('\n')}`
 }
 
-const generateMethods = (service, schema) => {
+const generateServiceOutput = (service, schema) => {
   const output = []
 
   service.methods.forEach((method) => {
-
-    const method_output = generateMethodOutput(method, schema)
+    const method_output = generateMessageOutput(method, schema, 4)
     output.push(`RCT_EXPORT_METHOD(${method.input_type}:(${method.input_type} *)req`)
     output.push(`${indent(2)}resolver:(RCTPromiseResolveBlock) resolve`)
     output.push(`${indent(2)}rejecter:(RCTPromiseRejectBlock) reject) {`)
     output.push(`${indent(2)}[_service ${method.input_type}:req handler:^(${method.output_type} *response, NSError *error) {`)
     output.push(`${indent(4)}if (error) {`)
     output.push(`${indent(6)}reject([@(error.code) stringValue], error.description, error);`)
-    output.push(`${indent(4)}return;`)
+    output.push(`${indent(6)}return;`)
+    output.push(`${indent(4)}}`)
+    output.push(``)
+    output.push(`${indent(4)}NSLog(@"native ${method.name}: %@", response);`)
+    output.push(``)
+    output.push(`${method_output}`)
+
     output.push(`${indent(2)}}`)
-    output.push(`${indent(2)}NSLog(@"native ${method.name}: %@", response);`)
-
-    output.push(method_output)
-
     output.push(`}`)
+    output.push(``)
   }, this)
 
   return output.join('\n')
@@ -124,7 +142,7 @@ export default (schema) => {
   console.dir(schema, {depth: null, color: true})
   schema.services.forEach((service) => {
     console.log(service.name)
-    const service_output = generateMethods(service, schema)
+    const service_output = generateServiceOutput(service, schema)
     output.push(service_output)
   }, this)
 

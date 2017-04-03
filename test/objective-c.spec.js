@@ -25,3 +25,10 @@ it('creates multiple service sample output', () => {
 
   expect(rsp).toMatchSnapshot()
 })
+
+it('creates multiple nested messages sample output', () => {
+  const sample = fs.readFileSync(`${__dirname}/test-samples/multiple-nested-sample.proto`, 'utf-8')
+  const rsp = ios(schema(sample))
+
+  expect(rsp).toMatchSnapshot()
+})

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package api.grpc;
+
+service GrpcService {
+    rpc SearchPlaces(SearchPlacesRequest) returns (Places) {}
+    rpc SearchLocations(SearchLocationsRequest) returns (Location) {}
+}
+
+message Coordinate {
+    required double lat = 1;
+    required double lng = 2;
+}
+
+message Location {
+    required Coordinate coordinate = 1;
+    string addressString = 2;
+}
+
+message SearchPlacesRequest {
+    required Coordinate coordinate = 1;
+    string query = 2;
+}
+
+message SearchLocationsRequest {
+    double lat = 1;
+    double lng = 2;
+}
+
+message Places {
+    repeated Location locations = 1;
+}

@@ -1,0 +1,1 @@
+./node_modules/.bin/babel-watch index.js test/test-samples/multiple-nested-sample.proto
