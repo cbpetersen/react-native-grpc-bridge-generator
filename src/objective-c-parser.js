@@ -1,6 +1,5 @@
 // @flow
 
-
 type EnumValue = {
   value: number,
   options: Object
@@ -56,14 +55,20 @@ type Schema = {
   services: Array<Service>
 }
 
-const primitiveTypes = ['double' , 'float' , 'int32' , 'int64' , 'uint32' ,
-    'uint64' , 'sint32' , 'sint64' , 'fixed32' , 'fixed64' , 'sfixed32' ,
-    'sfixed64' , 'bool' , 'string' , 'bytes']
+const primitiveTypes = ['double', 'float', 'int32', 'int64', 'uint32',
+  'uint64', 'sint32', 'sint64', 'fixed32', 'fixed64', 'sfixed32',
+  'sfixed64', 'bool', 'string', 'bytes']
 
-const tabLength = 2
-let arrays = {};
-let method_array_init_output = []
-const mappingMethods = {}
+const arrayMappers = {}
+
+String.prototype.lowerFirstChar = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+if (!String.prototype.toLowerCaseFirstChar) {
+  String.prototype.toLowerCaseFirstChar = function() {
+      return this.substr( 0, 1 ).toLowerCase() + this.substr( 1 );
+  }
+}
 
 if (!String.prototype.padStart) {
   String.prototype.padStart = function padStart (targetLength, padString) {
@@ -89,8 +94,12 @@ const append = (index: number, length: number) => {
   return isLast(index, length) ? '' : ','
 }
 
+const isLast = (index, length) => {
+  return index >= length - 1
+}
+
 const generateFieldOutput = (field: Field, schema: Schema, fieldPath: string, indention, index, length) => {
-  const debug = `// islast field: ${isLast(index, length)}`
+  const debug = ``//// islast field: ${isLast(index, length)}`
 
   if (primitiveTypes.some(type => type === field.type)) {
     if (field.type === 'string') {
@@ -100,148 +109,70 @@ const generateFieldOutput = (field: Field, schema: Schema, fieldPath: string, in
     return `${indent(indention)}@"${field.name}": @(${fieldPath}.${field.name})${append(index, length)} ${debug}`
   }
 
-  return `${indent(indention)}@"${field.name}": ${generateNonPrimitiveTypeOutput(field, schema, fieldPath, indention, index, length)}`
+  if (field.repeated) {
+    return `${indent(indention)}@"${field.name}": map${field.type}s(${fieldPath}.${field.name}Array)${append(index, length)} ${debug}`
+  }
+
+  return `${indent(indention)}@"${field.name}": map${field.type}(${fieldPath}.${field.name})${append(index, length)} ${debug}`
 }
 
-const generateNonPrimitiveTypeOutput = (message, schema, fieldPath, indention, index, length) => {
+/*
+to generate
+
+NSMutableArray* mapDrivers(Driver* obj)
+{
+}
+*/
+const generateArrayMappers = (field: Field, schema: Schema) => {
   const output = []
-  var output_type = schema.messages.find(x => x.name === message.type)
+  const indention = 2
 
-  if (message.repeated) {
-    method_array_init_output.push(`${indent(indention)}NSMutableArray *x = [[NSMutableArray alloc] init];`)
-    method_array_init_output.push(`${indent(indention)}for (${message.type} *obj in response.${message.name}) {`)
-
-    const repeatedOutputs = []
-    repeatedOutputs.push(`${indent(indention + 2)}[x addObject: @{`)
-    output_type.fields.forEach((field, innerIndex) => {
-      repeatedOutputs.push(`${indent(0)}${generateFieldOutput(field, schema, 'obj', indention + 4, innerIndex, output_type.fields.length)}`)
-    }, this)
-    repeatedOutputs.push(`${indent(indention + 2)}};`)
-    repeatedOutputs.push(`${indent(indention)}}`)
-
-    method_array_init_output.push(`${repeatedOutputs.join('\n')}`)
-    method_array_init_output.push(`${indent(indention - 2)}}`)
-    method_array_init_output.push(``)
-  } else {
-    output.push(`@{`)
-    console.log(message)
-    output_type.fields.forEach((field, innerIndex) => {
-      output.push(`${indent(0)}${generateFieldOutput(field, schema, fieldPath, indention + 2, innerIndex, output_type.fields.length)}`)
-    }, this)
-    if (isLast(index, length)) {
-      output.push(`${indent(indention)}}`)
-    } else {
-      output.push(`${indent(indention)}},`)
-    }
-  }
+  output.push(`${indent(0)}NSMutableArray* map${field.type}s(NSMutableArray* input) {`)
+  output.push(`${indent(indention)}NSMutableArray *output = [[NSMutableArray alloc] init];`)
+  output.push(`${indent(indention)}for (${field.type} *obj in input) {`)
+  output.push(`${indent(indention + 2)}[output addObject: map${field.type}(obj)];`)
+  output.push(`${indent(indention)}}`)
+  output.push(``)
+  output.push(`${indent(indention)}return output;`)
+  output.push(`${indent(0)}}`)
 
   return output.join('\n')
 }
 
-const isLast = (index, length) => {
-  return index >= length - 1
+/*
+to generate
+
+NSDictionary* mapDriver(Driver* obj)
+{
 }
-
-const generateArrayVariable = (field: Field, schema: Schema, fieldPath: string, indention, index, length, varName) => {
- const output = []
-  var output_type = schema.messages.find(x => x.name === field.type)
-
-  if (field.repeated) {
-    method_array_init_output.push(`${indent(indention)}NSMutableArray *${varName} = [[NSMutableArray alloc] init];`)
-    method_array_init_output.push(`${indent(indention)}for (${field.type} *obj in response.${field.name}) {`)
-
-    const repeatedOutputs = []
-    repeatedOutputs.push(`${indent(indention + 2)}[${varName} addObject: @{`)
-    output_type.fields.forEach((field, innerIndex) => {
-      repeatedOutputs.push(`${indent(0)}${generateFieldOutput(field, schema, 'obj', indention + 4, innerIndex, output_type.fields.length)}`)
-    }, this)
-    repeatedOutputs.push(`${indent(indention + 2)}};`)
-    repeatedOutputs.push(`${indent(indention)}}`)
-
-    method_array_init_output.push(`${repeatedOutputs.join('\n')}`)
-    method_array_init_output.push(`${indent(indention - 2)}}`)
-    method_array_init_output.push(``)
-  }
-}
-
-const generateArrayMessageOutput = (method: Method, schema: Schema, indention: number) => {
+*/
+const generateMessageMappers = (message: Message, schema: Schema) => {
   const output = []
-  // console.log(method)
-  var output_type = schema.messages.find(x => x.name === method.output_type)
-  // console.log(output_type)
-  // console.log(`output type: ${output_type}`)
-  const fieldPath = 'response'
-  // console.log(`repeated`)
-  if (output_type.fields.some(field => field.repeated)) {
-    // if (output_type.fields.length === 1) {
-      // console.log(`repeated`)
-      output_type.fields.forEach((field, index) => {
-        if (field.repeated) {
-          console.log(`repeated ${field.name} path: ${fieldPath}.${field.name}`)
-          let varName = `x${Object.getOwnPropertyNames.length}`
-          arrays[`${fieldPath}.${field.name}`] = varName
-          console.log(arrays)
-          generateArrayVariable(field, schema, fieldPath, indention + 2, index, output_type.fields.length, varName)
-          // output.push(`${generateFieldOutput(field, schema, fieldPath, indention + 2, index, output_type.fields.length)}`)
+  const arrayOutput = []
+  const indention = 2
 
-        }
-      }, this)
+  output.push(`${indent(0)}NSDictionary* map${message.name}(${message.name}* obj) {`)
+  output.push(`${indent(indention)}return @{ `)
+  message.fields.forEach((field, innerIndex) => {
+    if (field.repeated && !arrayMappers[`${field.type}`]) {
+      arrayOutput.push(generateArrayMappers(field, schema))
+      arrayOutput.push(``)
+      arrayMappers[`${field.type}`] = true
+    }
 
-      // arrays.push(`${fieldPath.field}`)
-    // } else {
-      // hasArrays = true
-      // throw new Error('not supported yet')
-  }
+    output.push(`${indent(0)}${generateFieldOutput(field, schema, 'obj', indention + 2, innerIndex, message.fields.length)}`)
+  }, this)
 
-  return `${output.join('\n')}`
+  output.push(`${indent(indention)}};`)
+  output.push(`}`)
+  output.push(``)
+
+  return arrayOutput.concat(output).join('\n')
 }
 
-const generateMessageWithoutArrays = (method: Method, schema: Schema, indention) => {
+const generateMethodOutput = (method: Method, schema: Schema, indention) => {
   const output = []
-  var output_type = schema.messages.find(x => x.name === method.output_type)
-  const fieldPath = 'response'
-
-  if (!output_type.fields.some(field => field.repeated)) {
-    output.push(`${indent(indention)}resolve(@{ `)
-    output_type.fields.forEach((field, index) => {
-      output.push(`${generateFieldOutput(field, schema, fieldPath, indention + 2, index, output_type.fields.length)}`)
-    }, this)
-    output.push(`${indent(indention)}});`)
-  }
-}
-
-const generateMessageOutput = (method, schema, indention) => {
-  const output = []
-  // console.log(method)
-  var output_type = schema.messages.find(x => x.name === method.output_type)
-  // console.log(output_type)
-  // console.log(`output type: ${output_type}`)
-  const fieldPath = 'response'
-  // if (output_type.fields.some(field => field.repeated)) {
-  // if (output_type.fields.some(field => field.repeated)) {
-    // output.push(`${indention}`)
-    // if (output_type.fields.length === 1) {
-      // output_type.fields.forEach((field, index) => {
-      //   output.push(`${generateFieldOutput(field, schema, fieldPath, indention + 2, index, output_type.fields.length)}`)
-      // }, this)
-      // output.push(`${indent(indention)}resolve(x);`)
-    // } else {
-      // hasArrays = true
-
-      // throw new Error('not supported yet')
-    // }
-  // } else {
-    // output.push(`${indent(indention)}resolve(@{ `)
-    output_type.fields.forEach((field, index) => {
-      if (field.repeated) {
-        let arrName = arrays[`${fieldPath}.${field.name}`]
-        output.push(`${indent(indention + 2)}@"${field.name}": ${arrName}${append(index, output_type.fields.length)}`)
-      } else {
-        output.push(`${generateFieldOutput(field, schema, fieldPath, indention + 2, index, output_type.fields.length)}`)
-      }
-    }, this)
-    // output.push(`${indent(indention)}});`)
-  // }
+  output.push(`${indent(indention)}resolve(map${method.output_type}(response));`)
 
   return `${output.join('\n')}`
 }
@@ -250,12 +181,11 @@ const generateServiceOutput = (service: Service, schema: Schema) => {
   const output = []
 
   service.methods.forEach((method) => {
-    generateArrayMessageOutput(method, schema, 4)
-    const method_output = generateMessageOutput(method, schema, 4)
-    output.push(`RCT_EXPORT_METHOD(${method.input_type}:(${method.input_type} *)req`)
+    const methodOutput = generateMethodOutput(method, schema, 4)
+    output.push(`RCT_EXPORT_METHOD(${method.name.toLowerCaseFirstChar()}:(${method.input_type} *)req`)
     output.push(`${indent(2)}resolver:(RCTPromiseResolveBlock) resolve`)
     output.push(`${indent(2)}rejecter:(RCTPromiseRejectBlock) reject) {`)
-    output.push(`${indent(2)}[_service ${method.input_type}:req handler:^(${method.output_type} *response, NSError *error) {`)
+    output.push(`${indent(2)}[_service ${method.name.toLowerCaseFirstChar()}WithRequest:req handler:^(${method.output_type} *response, NSError *error) {`)
     output.push(`${indent(4)}if (error) {`)
     output.push(`${indent(6)}reject([@(error.code) stringValue], error.description, error);`)
     output.push(`${indent(6)}return;`)
@@ -263,25 +193,8 @@ const generateServiceOutput = (service: Service, schema: Schema) => {
     output.push(``)
     output.push(`${indent(4)}NSLog(@"native ${method.name}: %@", response);`)
     output.push(``)
-
-    if (Object.getOwnPropertyNames !== 0) {
-      output.push(`${method_array_init_output.join('\n')}`)
-      output.push(``)
-      output.push(`${indent(4)}resolve(@{ `)
-    } else {
-      output.push(`${indent(4)}resolve(@{ `)
-    }
-
-    output.push(`${method_output}`)
-
-    if (Object.getOwnPropertyNames !== 0) {
-      output.push(`${indent(4)}resolve(x);`)
-      output.push(``)
-    } else {
-      output.push(`${indent(indention)}});`)
-    }
-
-    output.push(`${indent(2)}}`)
+    output.push(`${methodOutput}`)
+    output.push(`${indent(2)}}];`)
     output.push(`}`)
     output.push(``)
   }, this)
@@ -292,10 +205,15 @@ const generateServiceOutput = (service: Service, schema: Schema) => {
 export default (schema: Schema) => {
   const output = []
   console.dir(schema, {depth: null, color: true})
+
+  schema.messages.forEach((message) => {
+    output.push(generateMessageMappers(message, schema))
+  }, this)
+
   schema.services.forEach((service) => {
     console.log(service.name)
-    const service_output = generateServiceOutput(service, schema)
-    output.push(service_output)
+    const serviceOutput = generateServiceOutput(service, schema)
+    output.push(serviceOutput)
   }, this)
 
   return output.join('\n\n')

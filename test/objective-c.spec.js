@@ -4,7 +4,6 @@ import fs from 'fs'
 var schema = require('protocol-buffers-schema')
 import ios from '../src/objective-c-parser'
 
-
 it('creates sample output', () => {
   const sample = fs.readFileSync(`${__dirname}/test-samples/sample.proto`, 'utf-8')
   const rsp = ios(schema(sample))

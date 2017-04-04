@@ -1,5 +1,6 @@
 {
   "name": "protobuf-to-react-native-bridge-bindings",
+  "author": "Christoffer Bo Petersen",
   "version": "0.0.1",
   "description": "tool to create bridges for react native from proto files",
   "main": "index.js",
@@ -14,7 +15,6 @@
     "lint": "standard --verbose | snazzy",
     "standard-fix": "standard --fix"
   },
-  "author": "Christoffer Bo Petersen",
   "license": "MIT",
   "dependencies": {
     "protocol-buffers-schema": "^3.1.1",

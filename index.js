@@ -14,6 +14,6 @@ if (!fs.existsSync('output')) {
 }
 
 fs.writeFileSync('./output/ios.m', iosResult, {encoding: 'utf-8'})
-console.log("")
-console.log("")
+console.log('')
+console.log('')
 console.log(iosResult)

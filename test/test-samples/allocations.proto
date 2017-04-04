@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+package allocations;
+
+service Allocations {
+	rpc Assign(DriverAllocations) returns (AssignedAllocations) {}
+	rpc Accept(DriverAllocations) returns (AcceptedAllocations) {}
+	rpc AutoReject(DriverAllocations) returns (AutoRejectedAllocations) {}
+	rpc Reject(DriverAllocations) returns (RejectedAllocations) {}
+	rpc GetAllocatedBookings(Company) returns (AllocatedBookings) {}
+	rpc GetCurrentAllocations(Driver) returns (DriverAllocations) {}
+}
+
+enum DispatchType {
+	UNDEFINED = 0;
+	REGULAR = 1;
+	RIDE_SHARE = 2;
+	CAR_POOL = 3;
+}
+
+message DriverAllocations {
+	string driverUniqueId = 1;
+	string vehicleUniqueId = 2;
+	DispatchType dispatchType = 3;
+	repeated BookingAllocation allocations = 4;
+	Waypoints waypoints = 5;
+}
+
+message AssignedAllocations {
+	repeated Allocation allocations = 1;
+}
+
+message AcceptedAllocations {
+	repeated Allocation allocations = 1;
+}
+
+message AutoRejectedAllocations {
+	repeated Allocation allocations = 1;
+}
+
+message RejectedAllocations {
+	repeated Allocation allocations = 1;
+}
+
+message Allocation {
+	string uniqueId = 1;
+}
+
+message Driver {
+	string uniqueId = 1;
+}
+
+message BookingAllocation {
+
+	enum Status
+	{
+		UNDEFINED = 0;
+		ASSIGNED = 1;
+		REJECTED = 2;
+		AUTOREJECTED = 3;
+		ACCEPTED = 4;
+		COMPLETED = 8;
+		EXPIRED = 9;
+		CLAIMED = 10;
+		UNCLAIMED = 11;
+		ABORTED = 12;
+	}
+
+	string bookingUniqueId = 1;
+	repeated int32 durationInSeconds = 2;
+	repeated int32 distanceInMeters = 3;
+	bool isManual = 4;
+	int64 expireDateTime = 5;
+	int64 createdDateTime = 6;
+	int32 id = 7;
+	Status status = 8;
+	int32 seats = 9;
+}
+
+message Company {
+	string uniqueId = 1;
+}
+
+message Booking {
+	string uniqueId = 1;
+	int32 allocationStatus = 2;
+	string driverUniqueId = 3;
+}
+
+message AllocatedBookings {
+	repeated Booking bookings = 1;
+}
+
+message Waypoints {
+	repeated Waypoint array = 1;
+}
+
+message Waypoint {
+
+	enum WaypointType {
+		UNDEFINED = 0;
+		PICKUP = 1;
+		DROPOFF = 2;
+	}
+
+	string bookingUniqueId = 1;
+	WaypointType type = 2;
+}

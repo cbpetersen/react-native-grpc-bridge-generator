@@ -1,10 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`creates multiple nested messages sample output 1`] = `
-"RCT_EXPORT_METHOD(SearchPlacesRequest:(SearchPlacesRequest *)req
+"NSDictionary* mapCoordinate(Coordinate* obj) {
+  return @{ 
+    @\\"lat\\": @(obj.lat), 
+    @\\"lng\\": @(obj.lng) 
+  };
+}
+
+
+NSDictionary* mapLocation(Location* obj) {
+  return @{ 
+    @\\"coordinate\\": mapCoordinate(obj.coordinate), 
+    @\\"addressString\\": obj.addressString ?: [NSNull null] 
+  };
+}
+
+
+NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
+  return @{ 
+    @\\"coordinate\\": mapCoordinate(obj.coordinate), 
+    @\\"query\\": obj.query ?: [NSNull null] 
+  };
+}
+
+
+NSDictionary* mapSearchLocationsRequest(SearchLocationsRequest* obj) {
+  return @{ 
+    @\\"lat\\": @(obj.lat), 
+    @\\"lng\\": @(obj.lng) 
+  };
+}
+
+
+NSDictionary* mapPlaces(Places* obj) {
+  return @{ 
+    @\\"locations\\": mapLocations(obj.locationsArray) 
+  };
+}
+
+
+RCT_EXPORT_METHOD(searchPlaces:(SearchPlacesRequest *)req
   resolver:(RCTPromiseResolveBlock) resolve
   rejecter:(RCTPromiseRejectBlock) reject) {
-  [_service SearchPlacesRequest:req handler:^(Places *response, NSError *error) {
+  [_service searchPlacesWithRequest:req handler:^(Places *response, NSError *error) {
     if (error) {
       reject([@(error.code) stringValue], error.description, error);
       return;
@@ -12,26 +51,14 @@ exports[`creates multiple nested messages sample output 1`] = `
 
     NSLog(@\\"native SearchPlaces: %@\\", response);
 
-      @\\"locations\\": NSMutableArray *x = [[NSMutableArray alloc] init];
-      for (Location *obj in response.locations) {
-        [x addObject: @{
-          @\\"coordinate\\": @{
-            @\\"lat\\": @(obj.lat), // islast field: false
-            @\\"lng\\": @(obj.lng) // islast field: true
-          },
-          @\\"addressString\\": obj.addressString ?: [NSNull null] // islast field: true
-        };
-      }
-    }
-
-    resolve(x);
-  }
+    resolve(mapPlaces(response));
+  }];
 }
 
-RCT_EXPORT_METHOD(SearchLocationsRequest:(SearchLocationsRequest *)req
+RCT_EXPORT_METHOD(searchLocations:(SearchLocationsRequest *)req
   resolver:(RCTPromiseResolveBlock) resolve
   rejecter:(RCTPromiseRejectBlock) reject) {
-  [_service SearchLocationsRequest:req handler:^(Location *response, NSError *error) {
+  [_service searchLocationsWithRequest:req handler:^(Location *response, NSError *error) {
     if (error) {
       reject([@(error.code) stringValue], error.description, error);
       return;
@@ -39,23 +66,50 @@ RCT_EXPORT_METHOD(SearchLocationsRequest:(SearchLocationsRequest *)req
 
     NSLog(@\\"native SearchLocations: %@\\", response);
 
-    resolve(@{ 
-      @\\"coordinate\\": @{
-        @\\"lat\\": @(response.lat), // islast field: false
-        @\\"lng\\": @(response.lng) // islast field: true
-      },
-      @\\"addressString\\": response.addressString ?: [NSNull null] // islast field: true
-    });
-  }
+    resolve(mapLocation(response));
+  }];
 }
 "
 `;
 
 exports[`creates multiple service sample output 1`] = `
-"RCT_EXPORT_METHOD(SearchPlacesRequest:(SearchPlacesRequest *)req
+"NSDictionary* mapLocation(Location* obj) {
+  return @{ 
+    @\\"lat\\": @(obj.lat), 
+    @\\"lng\\": @(obj.lng), 
+    @\\"addressString\\": obj.addressString ?: [NSNull null] 
+  };
+}
+
+
+NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
+  return @{ 
+    @\\"lat\\": @(obj.lat), 
+    @\\"lng\\": @(obj.lng), 
+    @\\"query\\": obj.query ?: [NSNull null] 
+  };
+}
+
+
+NSDictionary* mapSearchLocationsRequest(SearchLocationsRequest* obj) {
+  return @{ 
+    @\\"lat\\": @(obj.lat), 
+    @\\"lng\\": @(obj.lng) 
+  };
+}
+
+
+NSDictionary* mapPlaces(Places* obj) {
+  return @{ 
+    @\\"Locations\\": mapLocations(obj.LocationsArray) 
+  };
+}
+
+
+RCT_EXPORT_METHOD(searchPlaces:(SearchPlacesRequest *)req
   resolver:(RCTPromiseResolveBlock) resolve
   rejecter:(RCTPromiseRejectBlock) reject) {
-  [_service SearchPlacesRequest:req handler:^(Places *response, NSError *error) {
+  [_service searchPlacesWithRequest:req handler:^(Places *response, NSError *error) {
     if (error) {
       reject([@(error.code) stringValue], error.description, error);
       return;
@@ -63,24 +117,14 @@ exports[`creates multiple service sample output 1`] = `
 
     NSLog(@\\"native SearchPlaces: %@\\", response);
 
-      @\\"Locations\\": NSMutableArray *x = [[NSMutableArray alloc] init];
-      for (Location *obj in response.Locations) {
-        [x addObject: @{
-          @\\"lat\\": @(obj.lat), // islast field: false
-          @\\"lng\\": @(obj.lng), // islast field: false
-          @\\"addressString\\": obj.addressString ?: [NSNull null] // islast field: true
-        };
-      }
-    }
-
-    resolve(x);
-  }
+    resolve(mapPlaces(response));
+  }];
 }
 
-RCT_EXPORT_METHOD(SearchLocationsRequest:(SearchLocationsRequest *)req
+RCT_EXPORT_METHOD(searchLocations:(SearchLocationsRequest *)req
   resolver:(RCTPromiseResolveBlock) resolve
   rejecter:(RCTPromiseRejectBlock) reject) {
-  [_service SearchLocationsRequest:req handler:^(Location *response, NSError *error) {
+  [_service searchLocationsWithRequest:req handler:^(Location *response, NSError *error) {
     if (error) {
       reject([@(error.code) stringValue], error.description, error);
       return;
@@ -88,21 +132,51 @@ RCT_EXPORT_METHOD(SearchLocationsRequest:(SearchLocationsRequest *)req
 
     NSLog(@\\"native SearchLocations: %@\\", response);
 
-    resolve(@{ 
-      @\\"lat\\": @(response.lat), // islast field: false
-      @\\"lng\\": @(response.lng), // islast field: false
-      @\\"addressString\\": response.addressString ?: [NSNull null] // islast field: true
-    });
-  }
+    resolve(mapLocation(response));
+  }];
 }
 "
 `;
 
 exports[`creates nested sample output 1`] = `
-"RCT_EXPORT_METHOD(SearchPlacesRequest:(SearchPlacesRequest *)req
+"NSDictionary* mapLocation(Location* obj) {
+  return @{ 
+    @\\"lat\\": @(obj.lat), 
+    @\\"lng\\": @(obj.lng), 
+    @\\"addressString\\": obj.addressString ?: [NSNull null] 
+  };
+}
+
+
+NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
+  return @{ 
+    @\\"lat\\": @(obj.lat), 
+    @\\"lng\\": @(obj.lng), 
+    @\\"query\\": obj.query ?: [NSNull null] 
+  };
+}
+
+
+NSMutableArray* mapLocations(NSMutableArray* input) {
+  NSMutableArray *output = [[NSMutableArray alloc] init];
+  for (Location *obj in input) {
+    [output addObject: mapLocation(obj)];
+  }
+
+  return output;
+}
+
+NSDictionary* mapPlaces(Places* obj) {
+  return @{ 
+    @\\"Locations\\": mapLocations(obj.LocationsArray) 
+  };
+}
+
+
+RCT_EXPORT_METHOD(searchPlaces:(SearchPlacesRequest *)req
   resolver:(RCTPromiseResolveBlock) resolve
   rejecter:(RCTPromiseRejectBlock) reject) {
-  [_service SearchPlacesRequest:req handler:^(Places *response, NSError *error) {
+  [_service searchPlacesWithRequest:req handler:^(Places *response, NSError *error) {
     if (error) {
       reject([@(error.code) stringValue], error.description, error);
       return;
@@ -110,27 +184,34 @@ exports[`creates nested sample output 1`] = `
 
     NSLog(@\\"native SearchPlaces: %@\\", response);
 
-      @\\"Locations\\": NSMutableArray *x = [[NSMutableArray alloc] init];
-      for (Location *obj in response.Locations) {
-        [x addObject: @{
-          @\\"lat\\": @(obj.lat), // islast field: false
-          @\\"lng\\": @(obj.lng), // islast field: false
-          @\\"addressString\\": obj.addressString ?: [NSNull null] // islast field: true
-        };
-      }
-    }
-
-    resolve(x);
-  }
+    resolve(mapPlaces(response));
+  }];
 }
 "
 `;
 
 exports[`creates sample output 1`] = `
-"RCT_EXPORT_METHOD(ReverseGeocodeRequest:(ReverseGeocodeRequest *)req
+"NSDictionary* mapReverseGeocodeRequest(ReverseGeocodeRequest* obj) {
+  return @{ 
+    @\\"lat\\": @(obj.lat), 
+    @\\"lng\\": @(obj.lng) 
+  };
+}
+
+
+NSDictionary* mapLocation(Location* obj) {
+  return @{ 
+    @\\"lat\\": @(obj.lat), 
+    @\\"lng\\": @(obj.lng), 
+    @\\"addressString\\": obj.addressString ?: [NSNull null] 
+  };
+}
+
+
+RCT_EXPORT_METHOD(reverseGeocode:(ReverseGeocodeRequest *)req
   resolver:(RCTPromiseResolveBlock) resolve
   rejecter:(RCTPromiseRejectBlock) reject) {
-  [_service ReverseGeocodeRequest:req handler:^(Location *response, NSError *error) {
+  [_service reverseGeocodeWithRequest:req handler:^(Location *response, NSError *error) {
     if (error) {
       reject([@(error.code) stringValue], error.description, error);
       return;
@@ -138,12 +219,8 @@ exports[`creates sample output 1`] = `
 
     NSLog(@\\"native ReverseGeocode: %@\\", response);
 
-    resolve(@{ 
-      @\\"lat\\": @(response.lat), // islast field: false
-      @\\"lng\\": @(response.lng), // islast field: false
-      @\\"addressString\\": response.addressString ?: [NSNull null] // islast field: true
-    });
-  }
+    resolve(mapLocation(response));
+  }];
 }
 "
 `;
