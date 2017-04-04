@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package booking;
+
+service BookingService {
+	rpc get(BookingRequest) returns (Booking) {}
+}
+
+message BookingRequest {
+	required string id = 1;
+}
+
+enum StopType {
+	UNDEFINED = 0;
+	PICKUP = 1;
+	DROPOFF = 2;
+}
+
+enum DispatchType {
+	UNDEFINED = 0;
+	REGULAR = 1;
+	RIDE_SHARE = 2;
+	CAR_POOL = 3;
+}
+
+message Rider {
+	string id = 1;
+	string firstName = 2;
+	string lastName = 3;
+}
+
+message Driver {
+	string id = 1;
+	string firstName = 2;
+	string lastName = 3;
+}
+
+message Booking {
+	string id = 1;
+	repeated Stop stops = 2;
+	Rider rider = 3;
+	Driver driver = 4;
+}
+
+message Stop {
+	string id = 1;
+	string type = 2;
+}
