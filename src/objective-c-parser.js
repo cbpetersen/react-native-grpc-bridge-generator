@@ -1,3 +1,61 @@
+// @flow
+
+
+type EnumValue = {
+  value: number,
+  options: Object
+}
+
+type Enum = {
+  name: string,
+  values: Array<EnumValue>,
+  options: Object
+}
+
+type Field = {
+  name: string,
+  type: string,
+  tag: number,
+  map: string,
+  oneof: string,
+  required: boolean,
+  repeated: boolean,
+  options: {}
+}
+
+type Message = {
+  name: string,
+  enums: [],
+  extends: [],
+  messages: Array<Message>,
+  fields: Array<Field>,
+  extensions: Message
+}
+
+type Method = {
+  name: string,
+  input_type: string,
+  output_type: string,
+  client_streaming: boolean,
+  server_streaming: boolean,
+  options: Object
+}
+
+type Service = {
+  name: string,
+  methods: Array<Method>,
+  options: Object
+}
+
+type Schema = {
+  syntax: number,
+  package: string,
+  imports: Array,
+  enums: Array<Enum>,
+  messages: Array<Message>,
+  services: Array<Service>
+}
+
 const primitiveTypes = ['double' , 'float' , 'int32' , 'int64' , 'uint32' ,
     'uint64' , 'sint32' , 'sint64' , 'fixed32' , 'fixed64' , 'sfixed32' ,
     'sfixed64' , 'bool' , 'string' , 'bytes']
@@ -5,45 +63,41 @@ const primitiveTypes = ['double' , 'float' , 'int32' , 'int64' , 'uint32' ,
 const tabLength = 2
 let arrays = {};
 let method_array_init_output = []
+const mappingMethods = {}
 
 if (!String.prototype.padStart) {
-    String.prototype.padStart = function padStart(targetLength,padString) {
-        targetLength = targetLength>>0; //floor if number or convert non-number to 0;
-        padString = String(padString || ' ');
-        if (this.length > targetLength) {
-            return String(this);
-        }
-        else {
-            targetLength = targetLength-this.length;
-            if (targetLength > padString.length) {
-                padString += padString.repeat(targetLength/padString.length); //append to original to ensure we are longer than needed
-            }
-            return padString.slice(0,targetLength) + String(this);
-        }
-    };
+  String.prototype.padStart = function padStart (targetLength, padString) {
+    targetLength = targetLength >> 0  // floor if number or convert non-number to 0;
+    padString = String(padString || ' ')
+    if (this.length > targetLength) {
+      return String(this)
+    } else {
+      targetLength = targetLength - this.length
+      if (targetLength > padString.length) {
+        padString += padString.repeat(targetLength / padString.length)  // append to original to ensure we are longer than needed
+      }
+      return padString.slice(0, targetLength) + String(this)
+    }
+  }
 }
 
-const indent = (length) => {
+const indent = (length: number) => {
   return ''.padStart(length)
 }
 
-const append = (index, length) => {
+const append = (index: number, length: number) => {
   return isLast(index, length) ? '' : ','
 }
 
-const generateFieldOutput = (field, schema, fieldPath, indention, index, length) => {
+const generateFieldOutput = (field: Field, schema: Schema, fieldPath: string, indention, index, length) => {
   const debug = `// islast field: ${isLast(index, length)}`
 
-  if (field.repeated) {
-
-  }
-
   if (primitiveTypes.some(type => type === field.type)) {
-      if (field.type === 'string') {
-        return `${indent(indention)}@"${field.name}": ${fieldPath}.${field.name} ?: [NSNull null]${append(index, length)} ${debug}`
-      }
+    if (field.type === 'string') {
+      return `${indent(indention)}@"${field.name}": ${fieldPath}.${field.name} ?: [NSNull null]${append(index, length)} ${debug}`
+    }
 
-      return `${indent(indention)}@"${field.name}": @(${fieldPath}.${field.name})${append(index, length)} ${debug}`
+    return `${indent(indention)}@"${field.name}": @(${fieldPath}.${field.name})${append(index, length)} ${debug}`
   }
 
   return `${indent(indention)}@"${field.name}": ${generateNonPrimitiveTypeOutput(field, schema, fieldPath, indention, index, length)}`
@@ -68,12 +122,11 @@ const generateNonPrimitiveTypeOutput = (message, schema, fieldPath, indention, i
     method_array_init_output.push(`${repeatedOutputs.join('\n')}`)
     method_array_init_output.push(`${indent(indention - 2)}}`)
     method_array_init_output.push(``)
-  }
-  else {
+  } else {
     output.push(`@{`)
-      console.log(message)
+    console.log(message)
     output_type.fields.forEach((field, innerIndex) => {
-      output.push(`${indent(0)}${generateFieldOutput(field, schema, fieldPath, indention +2, innerIndex, output_type.fields.length)}`)
+      output.push(`${indent(0)}${generateFieldOutput(field, schema, fieldPath, indention + 2, innerIndex, output_type.fields.length)}`)
     }, this)
     if (isLast(index, length)) {
       output.push(`${indent(indention)}}`)
@@ -89,7 +142,7 @@ const isLast = (index, length) => {
   return index >= length - 1
 }
 
-const generateArrayVariable = (field, schema, fieldPath, indention, index, length, varName) => {
+const generateArrayVariable = (field: Field, schema: Schema, fieldPath: string, indention, index, length, varName) => {
  const output = []
   var output_type = schema.messages.find(x => x.name === field.type)
 
@@ -111,7 +164,7 @@ const generateArrayVariable = (field, schema, fieldPath, indention, index, lengt
   }
 }
 
-const generateArrayMessageOutput = (method, schema, indention) => {
+const generateArrayMessageOutput = (method: Method, schema: Schema, indention: number) => {
   const output = []
   // console.log(method)
   var output_type = schema.messages.find(x => x.name === method.output_type)
@@ -143,7 +196,7 @@ const generateArrayMessageOutput = (method, schema, indention) => {
   return `${output.join('\n')}`
 }
 
-const generateMessageWithoutArrays = (method, schema, indention) => {
+const generateMessageWithoutArrays = (method: Method, schema: Schema, indention) => {
   const output = []
   var output_type = schema.messages.find(x => x.name === method.output_type)
   const fieldPath = 'response'
@@ -193,7 +246,7 @@ const generateMessageOutput = (method, schema, indention) => {
   return `${output.join('\n')}`
 }
 
-const generateServiceOutput = (service, schema) => {
+const generateServiceOutput = (service: Service, schema: Schema) => {
   const output = []
 
   service.methods.forEach((method) => {
@@ -236,7 +289,7 @@ const generateServiceOutput = (service, schema) => {
   return output.join('\n')
 }
 
-export default (schema) => {
+export default (schema: Schema) => {
   const output = []
   console.dir(schema, {depth: null, color: true})
   schema.services.forEach((service) => {

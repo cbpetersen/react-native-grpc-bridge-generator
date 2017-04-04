@@ -5,6 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-watch index.js",
+    "flow-check": "flow check",
+    "flow-cli": "flow",
+    "flow-init": "flow init",
+    "flow-typed-cli": "flow-typed",
+    "flow-typed-install": "flow-typed install",
     "test": "jest",
     "lint": "standard --verbose | snazzy",
     "standard-fix": "standard --fix"
@@ -15,13 +20,21 @@
     "protocol-buffers-schema": "^3.1.1",
     "yargs": "^7.0.2"
   },
+  "standard": {
+    "parser": "babel-eslint"
+  },
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-cli": "^6.24.0",
     "babel-core": "^6.24.0",
+    "babel-eslint": "^7.2.1",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-stage-0": "^6.22.0",
     "babel-watch": "^2.0.6",
+    "flow": "^0.2.3",
+    "flow-bin": "^0.42.0",
+    "flow-typed": "^2.0.0",
     "jest": "^19.0.2",
     "snazzy": "^6.0.0",
     "standard": "^9.0.2"
