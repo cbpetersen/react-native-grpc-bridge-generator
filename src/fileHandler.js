@@ -26,6 +26,8 @@ export default (protoFile: string) => {
 
   fs.writeFileSync(`output/${protoFileName}.h`, iosBridgeHeaderFile, {encoding: 'utf-8'})
   fs.writeFileSync(`output/${protoFileName}.m`, iosBridgeFile, {encoding: 'utf-8'})
+
+  console.log(fileSchema)
   console.log('')
   console.log('')
   console.log(iosBridgeFile)

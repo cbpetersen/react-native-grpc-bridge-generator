@@ -63,34 +63,24 @@ const primitiveTypes = ['double', 'float', 'int32', 'int64', 'uint32',
 
 const arrayMappers = {}
 
-const indent = (length: number) => {
-  return ' '.repeat(length)
-}
-
-const append = (index: number, length: number) => {
-  return isLast(index, length) ? '' : ','
-}
-
-const isLast = (index, length) => {
-  return index >= length - 1
-}
+const indent = (length: number) => ' '.repeat(length)
+const append = (index: number, length: number) => isLast(index, length) ? '' : ','
+const isLast = (index, length) => index >= length - 1
 
 const generateFieldOutput = (field: Field, schema: Schema, fieldPath: string, indention, index, length) => {
-  const debug = ``//// islast field: ${isLast(index, length)}`
-
   if (primitiveTypes.some(type => type === field.type)) {
     if (field.type === 'string') {
-      return `${indent(indention)}@"${field.name}": ${fieldPath}.${field.name} ?: [NSNull null]${append(index, length)} ${debug}`
+      return `${indent(indention)}@"${field.name}": ${fieldPath}.${field.name} ?: [NSNull null]${append(index, length)}`
     }
 
-    return `${indent(indention)}@"${field.name}": @(${fieldPath}.${field.name})${append(index, length)} ${debug}`
+    return `${indent(indention)}@"${field.name}": @(${fieldPath}.${field.name})${append(index, length)}`
   }
 
   if (field.repeated) {
-    return `${indent(indention)}@"${field.name}": map${field.type}s(${fieldPath}.${field.name}Array)${append(index, length)} ${debug}`
+    return `${indent(indention)}@"${field.name}": map${field.type}s(${fieldPath}.${field.name}Array)${append(index, length)}`
   }
 
-  return `${indent(indention)}@"${field.name}": map${field.type}(${fieldPath}.${field.name})${append(index, length)} ${debug}`
+  return `${indent(indention)}@"${field.name}": map${field.type}(${fieldPath}.${field.name})${append(index, length)}`
 }
 
 /*
@@ -211,7 +201,6 @@ const generateServiceOutput = (service: Service, schema: Schema) => {
 
 export default (schema: Schema) => {
   const output = []
-  console.dir(['Schema', schema], {depth: null, color: true})
 
   schema.messages.forEach((message) => {
     output.push(generateMessageMappers(message, schema))

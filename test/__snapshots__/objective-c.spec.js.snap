@@ -3,39 +3,39 @@
 exports[`creates multiple nested messages sample output 1`] = `
 "static inline NSDictionary* mapCoordinate(Coordinate* obj) {
   return @{ 
-    @\\"lat\\": @(obj.lat), 
-    @\\"lng\\": @(obj.lng) 
+    @\\"lat\\": @(obj.lat),
+    @\\"lng\\": @(obj.lng)
   };
 }
 
 
 static inline NSDictionary* mapLocation(Location* obj) {
   return @{ 
-    @\\"coordinate\\": mapCoordinate(obj.coordinate), 
-    @\\"addressString\\": obj.addressString ?: [NSNull null] 
+    @\\"coordinate\\": mapCoordinate(obj.coordinate),
+    @\\"addressString\\": obj.addressString ?: [NSNull null]
   };
 }
 
 
 static inline NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
   return @{ 
-    @\\"coordinate\\": mapCoordinate(obj.coordinate), 
-    @\\"query\\": obj.query ?: [NSNull null] 
+    @\\"coordinate\\": mapCoordinate(obj.coordinate),
+    @\\"query\\": obj.query ?: [NSNull null]
   };
 }
 
 
 static inline NSDictionary* mapSearchLocationsRequest(SearchLocationsRequest* obj) {
   return @{ 
-    @\\"lat\\": @(obj.lat), 
-    @\\"lng\\": @(obj.lng) 
+    @\\"lat\\": @(obj.lat),
+    @\\"lng\\": @(obj.lng)
   };
 }
 
 
 static inline NSDictionary* mapPlaces(Places* obj) {
   return @{ 
-    @\\"locations\\": mapLocations(obj.locationsArray) 
+    @\\"locations\\": mapLocations(obj.locationsArray)
   };
 }
 
@@ -91,33 +91,33 @@ RCT_EXPORT_METHOD(searchLocations:(NSDictionary *)input
 exports[`creates multiple service sample output 1`] = `
 "static inline NSDictionary* mapLocation(Location* obj) {
   return @{ 
-    @\\"lat\\": @(obj.lat), 
-    @\\"lng\\": @(obj.lng), 
-    @\\"addressString\\": obj.addressString ?: [NSNull null] 
+    @\\"lat\\": @(obj.lat),
+    @\\"lng\\": @(obj.lng),
+    @\\"addressString\\": obj.addressString ?: [NSNull null]
   };
 }
 
 
 static inline NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
   return @{ 
-    @\\"lat\\": @(obj.lat), 
-    @\\"lng\\": @(obj.lng), 
-    @\\"query\\": obj.query ?: [NSNull null] 
+    @\\"lat\\": @(obj.lat),
+    @\\"lng\\": @(obj.lng),
+    @\\"query\\": obj.query ?: [NSNull null]
   };
 }
 
 
 static inline NSDictionary* mapSearchLocationsRequest(SearchLocationsRequest* obj) {
   return @{ 
-    @\\"lat\\": @(obj.lat), 
-    @\\"lng\\": @(obj.lng) 
+    @\\"lat\\": @(obj.lat),
+    @\\"lng\\": @(obj.lng)
   };
 }
 
 
 static inline NSDictionary* mapPlaces(Places* obj) {
   return @{ 
-    @\\"Locations\\": mapLocations(obj.LocationsArray) 
+    @\\"Locations\\": mapLocations(obj.LocationsArray)
   };
 }
 
@@ -174,18 +174,18 @@ RCT_EXPORT_METHOD(searchLocations:(NSDictionary *)input
 exports[`creates nested sample output 1`] = `
 "static inline NSDictionary* mapLocation(Location* obj) {
   return @{ 
-    @\\"lat\\": @(obj.lat), 
-    @\\"lng\\": @(obj.lng), 
-    @\\"addressString\\": obj.addressString ?: [NSNull null] 
+    @\\"lat\\": @(obj.lat),
+    @\\"lng\\": @(obj.lng),
+    @\\"addressString\\": obj.addressString ?: [NSNull null]
   };
 }
 
 
 static inline NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
   return @{ 
-    @\\"lat\\": @(obj.lat), 
-    @\\"lng\\": @(obj.lng), 
-    @\\"query\\": obj.query ?: [NSNull null] 
+    @\\"lat\\": @(obj.lat),
+    @\\"lng\\": @(obj.lng),
+    @\\"query\\": obj.query ?: [NSNull null]
   };
 }
 
@@ -201,7 +201,7 @@ static inline NSMutableArray* mapLocations(NSMutableArray* input) {
 
 static inline NSDictionary* mapPlaces(Places* obj) {
   return @{ 
-    @\\"Locations\\": mapLocations(obj.LocationsArray) 
+    @\\"Locations\\": mapLocations(obj.LocationsArray)
   };
 }
 
@@ -235,17 +235,17 @@ RCT_EXPORT_METHOD(searchPlaces:(NSDictionary *)input
 exports[`creates sample output 1`] = `
 "static inline NSDictionary* mapReverseGeocodeRequest(ReverseGeocodeRequest* obj) {
   return @{ 
-    @\\"lat\\": @(obj.lat), 
-    @\\"lng\\": @(obj.lng) 
+    @\\"lat\\": @(obj.lat),
+    @\\"lng\\": @(obj.lng)
   };
 }
 
 
 static inline NSDictionary* mapLocation(Location* obj) {
   return @{ 
-    @\\"lat\\": @(obj.lat), 
-    @\\"lng\\": @(obj.lng), 
-    @\\"addressString\\": obj.addressString ?: [NSNull null] 
+    @\\"lat\\": @(obj.lat),
+    @\\"lng\\": @(obj.lng),
+    @\\"addressString\\": obj.addressString ?: [NSNull null]
   };
 }
 
