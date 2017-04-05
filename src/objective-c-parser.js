@@ -1,5 +1,7 @@
 // @flow
 
+import camelCase from 'lodash.camelcase'
+
 type EnumValue = {
   value: number,
   options: Object
@@ -61,30 +63,8 @@ const primitiveTypes = ['double', 'float', 'int32', 'int64', 'uint32',
 
 const arrayMappers = {}
 
-if (!String.prototype.toLowerCaseFirstChar) {
-  String.prototype.toLowerCaseFirstChar = function() {
-      return this.substr( 0, 1 ).toLowerCase() + this.substr( 1 )
-  }
-}
-
-if (!String.prototype.padStart) {
-  String.prototype.padStart = function padStart (targetLength, padString) {
-    targetLength = targetLength >> 0  // floor if number or convert non-number to 0;
-    padString = String(padString || ' ')
-    if (this.length > targetLength) {
-      return String(this)
-    } else {
-      targetLength = targetLength - this.length
-      if (targetLength > padString.length) {
-        padString += padString.repeat(targetLength / padString.length)  // append to original to ensure we are longer than needed
-      }
-      return padString.slice(0, targetLength) + String(this)
-    }
-  }
-}
-
 const indent = (length: number) => {
-  return ''.padStart(length)
+  return ' '.repeat(length)
 }
 
 const append = (index: number, length: number) => {
@@ -208,11 +188,11 @@ const generateServiceOutput = (service: Service, schema: Schema) => {
     const methodOutput = generateMethodOutput(method, schema, 4)
     const inputMessageType = schema.messages.find(msg => msg.name === method.input_type)
 
-    output.push(`RCT_EXPORT_METHOD(${method.name.toLowerCaseFirstChar()}:(NSDictionary *)input`)
+    output.push(`RCT_EXPORT_METHOD(${camelCase(method.name)}:(NSDictionary *)input`)
     output.push(`${indent(2)}resolver:(RCTPromiseResolveBlock) resolve`)
     output.push(`${indent(2)}rejecter:(RCTPromiseRejectBlock) reject) {`)
     output.push(``)
-    output.push(`${indent(2)}[_service ${method.name.toLowerCaseFirstChar()}WithRequest:mapToGRPC${inputMessageType.name}(input) handler:^(${method.output_type} *response, NSError *error) {`)
+    output.push(`${indent(2)}[_service ${camelCase(method.name)}WithRequest:mapToGRPC${inputMessageType.name}(input) handler:^(${method.output_type} *response, NSError *error) {`)
     output.push(`${indent(4)}if (error) {`)
     output.push(`${indent(6)}reject([@(error.code) stringValue], error.description, error);`)
     output.push(`${indent(6)}return;`)

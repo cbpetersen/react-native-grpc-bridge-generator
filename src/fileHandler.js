@@ -4,10 +4,15 @@ import fs from 'fs'
 import path from 'path'
 import iosHeaderCreator from './objective-c-header-creator'
 import schema from 'protocol-buffers-schema'
+import pascalCase from 'pascal-case'
 import ios from './objective-c-parser'
 
 export default (protoFile: string) => {
-  const protoFileName = path.basename(protoFile, path.extname(protoFile))
+  let protoFileName = pascalCase(path.basename(protoFile, path.extname(protoFile)))
+
+  if (protoFileName.indexOf('Service') === -1) {
+    protoFileName += 'Service'
+  }
 
   const file = fs.readFileSync(protoFile, 'utf-8')
 
