@@ -61,12 +61,9 @@ const primitiveTypes = ['double', 'float', 'int32', 'int64', 'uint32',
 
 const arrayMappers = {}
 
-String.prototype.lowerFirstChar = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
-}
 if (!String.prototype.toLowerCaseFirstChar) {
   String.prototype.toLowerCaseFirstChar = function() {
-      return this.substr( 0, 1 ).toLowerCase() + this.substr( 1 );
+      return this.substr( 0, 1 ).toLowerCase() + this.substr( 1 )
   }
 }
 
@@ -170,6 +167,33 @@ const generateMessageMappers = (message: Message, schema: Schema) => {
   return arrayOutput.concat(output).join('\n')
 }
 
+const mapRequestFields = (field: Field, schema: Schema, indention, index, length) => {
+  if (primitiveTypes.some(type => type === field.type)) {
+    if (field.type === 'string') {
+      return `${indent(indention)}output.${field.name} = [RCTConvert NSString:input[@"${field.name}"]];`
+    } else if (field.type === 'double') {
+      return `${indent(indention)}output.${field.name} = [[RCTConvert NSNumber:input[@"${field.name}"]] doubleValue];`
+    }
+  }
+}
+
+const generateRequestMapping = (message: Message, schema: Schema) => {
+  const output = []
+  const indention = 2
+
+  output.push(`${indent(0)}${message.name}* mapToGRPC${message.name}(NSDictionary* input) {`)
+  output.push(`${indent(indention)}${message.name} *output = [[${message.name} alloc] init];`)
+
+  message.fields.forEach((field, innerIndex) => {
+    output.push(mapRequestFields(field, schema, indention, innerIndex, message.fields.length))
+  }, this)
+
+  output.push(`${indent(indention)}return output;`)
+  output.push(`${indent(0)}}`)
+
+  return output.join('\n')
+}
+
 const generateMethodOutput = (method: Method, schema: Schema, indention) => {
   const output = []
   output.push(`${indent(indention)}resolve(map${method.output_type}(response));`)
@@ -182,10 +206,13 @@ const generateServiceOutput = (service: Service, schema: Schema) => {
 
   service.methods.forEach((method) => {
     const methodOutput = generateMethodOutput(method, schema, 4)
-    output.push(`RCT_EXPORT_METHOD(${method.name.toLowerCaseFirstChar()}:(${method.input_type} *)req`)
+    const inputMessageType = schema.messages.find(msg => msg.name === method.input_type)
+
+    output.push(`RCT_EXPORT_METHOD(${method.name.toLowerCaseFirstChar()}:(NSDictionary *)input`)
     output.push(`${indent(2)}resolver:(RCTPromiseResolveBlock) resolve`)
     output.push(`${indent(2)}rejecter:(RCTPromiseRejectBlock) reject) {`)
-    output.push(`${indent(2)}[_service ${method.name.toLowerCaseFirstChar()}WithRequest:req handler:^(${method.output_type} *response, NSError *error) {`)
+    output.push(``)
+    output.push(`${indent(2)}[_service ${method.name.toLowerCaseFirstChar()}WithRequest:mapToGRPC${inputMessageType.name}(input) handler:^(${method.output_type} *response, NSError *error) {`)
     output.push(`${indent(4)}if (error) {`)
     output.push(`${indent(6)}reject([@(error.code) stringValue], error.description, error);`)
     output.push(`${indent(6)}return;`)
@@ -204,14 +231,19 @@ const generateServiceOutput = (service: Service, schema: Schema) => {
 
 export default (schema: Schema) => {
   const output = []
-  console.dir(schema, {depth: null, color: true})
+  console.dir(['Schema', schema], {depth: null, color: true})
 
   schema.messages.forEach((message) => {
     output.push(generateMessageMappers(message, schema))
   }, this)
 
   schema.services.forEach((service) => {
-    console.log(service.name)
+    service.methods.forEach((method) => {
+      const inputMessageType = schema.messages.find(msg => msg.name === method.input_type)
+      const requestMappingOutput = generateRequestMapping(inputMessageType, schema, 4)
+      output.push(requestMappingOutput)
+    }, this)
+
     const serviceOutput = generateServiceOutput(service, schema)
     output.push(serviceOutput)
   }, this)
