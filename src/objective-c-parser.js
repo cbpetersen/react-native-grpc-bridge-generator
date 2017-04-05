@@ -124,7 +124,7 @@ const generateArrayMappers = (field: Field, schema: Schema) => {
   const output = []
   const indention = 2
 
-  output.push(`${indent(0)}NSMutableArray* map${field.type}s(NSMutableArray* input) {`)
+  output.push(`${indent(0)}static inline NSMutableArray* map${field.type}s(NSMutableArray* input) {`)
   output.push(`${indent(indention)}NSMutableArray *output = [[NSMutableArray alloc] init];`)
   output.push(`${indent(indention)}for (${field.type} *obj in input) {`)
   output.push(`${indent(indention + 2)}[output addObject: map${field.type}(obj)];`)
@@ -148,7 +148,7 @@ const generateMessageMappers = (message: Message, schema: Schema) => {
   const arrayOutput = []
   const indention = 2
 
-  output.push(`${indent(0)}NSDictionary* map${message.name}(${message.name}* obj) {`)
+  output.push(`${indent(0)}static inline NSDictionary* map${message.name}(${message.name}* obj) {`)
   output.push(`${indent(indention)}return @{ `)
   message.fields.forEach((field, innerIndex) => {
     if (field.repeated && !arrayMappers[`${field.type}`]) {
@@ -181,7 +181,7 @@ const generateRequestMapping = (message: Message, schema: Schema) => {
   const output = []
   const indention = 2
 
-  output.push(`${indent(0)}${message.name}* mapToGRPC${message.name}(NSDictionary* input) {`)
+  output.push(`${indent(0)}static inline ${message.name}* mapToGRPC${message.name}(NSDictionary* input) {`)
   output.push(`${indent(indention)}${message.name} *output = [[${message.name} alloc] init];`)
 
   message.fields.forEach((field, innerIndex) => {

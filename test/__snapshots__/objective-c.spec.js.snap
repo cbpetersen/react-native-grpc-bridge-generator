@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`creates multiple nested messages sample output 1`] = `
-"NSDictionary* mapCoordinate(Coordinate* obj) {
+"static inline NSDictionary* mapCoordinate(Coordinate* obj) {
   return @{ 
     @\\"lat\\": @(obj.lat), 
     @\\"lng\\": @(obj.lng) 
@@ -9,7 +9,7 @@ exports[`creates multiple nested messages sample output 1`] = `
 }
 
 
-NSDictionary* mapLocation(Location* obj) {
+static inline NSDictionary* mapLocation(Location* obj) {
   return @{ 
     @\\"coordinate\\": mapCoordinate(obj.coordinate), 
     @\\"addressString\\": obj.addressString ?: [NSNull null] 
@@ -17,7 +17,7 @@ NSDictionary* mapLocation(Location* obj) {
 }
 
 
-NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
+static inline NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
   return @{ 
     @\\"coordinate\\": mapCoordinate(obj.coordinate), 
     @\\"query\\": obj.query ?: [NSNull null] 
@@ -25,7 +25,7 @@ NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
 }
 
 
-NSDictionary* mapSearchLocationsRequest(SearchLocationsRequest* obj) {
+static inline NSDictionary* mapSearchLocationsRequest(SearchLocationsRequest* obj) {
   return @{ 
     @\\"lat\\": @(obj.lat), 
     @\\"lng\\": @(obj.lng) 
@@ -33,21 +33,21 @@ NSDictionary* mapSearchLocationsRequest(SearchLocationsRequest* obj) {
 }
 
 
-NSDictionary* mapPlaces(Places* obj) {
+static inline NSDictionary* mapPlaces(Places* obj) {
   return @{ 
     @\\"locations\\": mapLocations(obj.locationsArray) 
   };
 }
 
 
-SearchPlacesRequest* mapToGRPCSearchPlacesRequest(NSDictionary* input) {
+static inline SearchPlacesRequest* mapToGRPCSearchPlacesRequest(NSDictionary* input) {
   SearchPlacesRequest *output = [[SearchPlacesRequest alloc] init];
 
   output.query = [RCTConvert NSString:input[@\\"query\\"]];
   return output;
 }
 
-SearchLocationsRequest* mapToGRPCSearchLocationsRequest(NSDictionary* input) {
+static inline SearchLocationsRequest* mapToGRPCSearchLocationsRequest(NSDictionary* input) {
   SearchLocationsRequest *output = [[SearchLocationsRequest alloc] init];
   output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
   output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
@@ -89,7 +89,7 @@ RCT_EXPORT_METHOD(searchLocations:(NSDictionary *)input
 `;
 
 exports[`creates multiple service sample output 1`] = `
-"NSDictionary* mapLocation(Location* obj) {
+"static inline NSDictionary* mapLocation(Location* obj) {
   return @{ 
     @\\"lat\\": @(obj.lat), 
     @\\"lng\\": @(obj.lng), 
@@ -98,7 +98,7 @@ exports[`creates multiple service sample output 1`] = `
 }
 
 
-NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
+static inline NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
   return @{ 
     @\\"lat\\": @(obj.lat), 
     @\\"lng\\": @(obj.lng), 
@@ -107,7 +107,7 @@ NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
 }
 
 
-NSDictionary* mapSearchLocationsRequest(SearchLocationsRequest* obj) {
+static inline NSDictionary* mapSearchLocationsRequest(SearchLocationsRequest* obj) {
   return @{ 
     @\\"lat\\": @(obj.lat), 
     @\\"lng\\": @(obj.lng) 
@@ -115,14 +115,14 @@ NSDictionary* mapSearchLocationsRequest(SearchLocationsRequest* obj) {
 }
 
 
-NSDictionary* mapPlaces(Places* obj) {
+static inline NSDictionary* mapPlaces(Places* obj) {
   return @{ 
     @\\"Locations\\": mapLocations(obj.LocationsArray) 
   };
 }
 
 
-SearchPlacesRequest* mapToGRPCSearchPlacesRequest(NSDictionary* input) {
+static inline SearchPlacesRequest* mapToGRPCSearchPlacesRequest(NSDictionary* input) {
   SearchPlacesRequest *output = [[SearchPlacesRequest alloc] init];
   output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
   output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
@@ -130,7 +130,7 @@ SearchPlacesRequest* mapToGRPCSearchPlacesRequest(NSDictionary* input) {
   return output;
 }
 
-SearchLocationsRequest* mapToGRPCSearchLocationsRequest(NSDictionary* input) {
+static inline SearchLocationsRequest* mapToGRPCSearchLocationsRequest(NSDictionary* input) {
   SearchLocationsRequest *output = [[SearchLocationsRequest alloc] init];
   output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
   output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
@@ -172,7 +172,7 @@ RCT_EXPORT_METHOD(searchLocations:(NSDictionary *)input
 `;
 
 exports[`creates nested sample output 1`] = `
-"NSDictionary* mapLocation(Location* obj) {
+"static inline NSDictionary* mapLocation(Location* obj) {
   return @{ 
     @\\"lat\\": @(obj.lat), 
     @\\"lng\\": @(obj.lng), 
@@ -181,7 +181,7 @@ exports[`creates nested sample output 1`] = `
 }
 
 
-NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
+static inline NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
   return @{ 
     @\\"lat\\": @(obj.lat), 
     @\\"lng\\": @(obj.lng), 
@@ -190,7 +190,7 @@ NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
 }
 
 
-NSMutableArray* mapLocations(NSMutableArray* input) {
+static inline NSMutableArray* mapLocations(NSMutableArray* input) {
   NSMutableArray *output = [[NSMutableArray alloc] init];
   for (Location *obj in input) {
     [output addObject: mapLocation(obj)];
@@ -199,14 +199,14 @@ NSMutableArray* mapLocations(NSMutableArray* input) {
   return output;
 }
 
-NSDictionary* mapPlaces(Places* obj) {
+static inline NSDictionary* mapPlaces(Places* obj) {
   return @{ 
     @\\"Locations\\": mapLocations(obj.LocationsArray) 
   };
 }
 
 
-SearchPlacesRequest* mapToGRPCSearchPlacesRequest(NSDictionary* input) {
+static inline SearchPlacesRequest* mapToGRPCSearchPlacesRequest(NSDictionary* input) {
   SearchPlacesRequest *output = [[SearchPlacesRequest alloc] init];
   output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
   output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
@@ -233,7 +233,7 @@ RCT_EXPORT_METHOD(searchPlaces:(NSDictionary *)input
 `;
 
 exports[`creates sample output 1`] = `
-"NSDictionary* mapReverseGeocodeRequest(ReverseGeocodeRequest* obj) {
+"static inline NSDictionary* mapReverseGeocodeRequest(ReverseGeocodeRequest* obj) {
   return @{ 
     @\\"lat\\": @(obj.lat), 
     @\\"lng\\": @(obj.lng) 
@@ -241,7 +241,7 @@ exports[`creates sample output 1`] = `
 }
 
 
-NSDictionary* mapLocation(Location* obj) {
+static inline NSDictionary* mapLocation(Location* obj) {
   return @{ 
     @\\"lat\\": @(obj.lat), 
     @\\"lng\\": @(obj.lng), 
@@ -250,7 +250,7 @@ NSDictionary* mapLocation(Location* obj) {
 }
 
 
-ReverseGeocodeRequest* mapToGRPCReverseGeocodeRequest(NSDictionary* input) {
+static inline ReverseGeocodeRequest* mapToGRPCReverseGeocodeRequest(NSDictionary* input) {
   ReverseGeocodeRequest *output = [[ReverseGeocodeRequest alloc] init];
   output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
   output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
