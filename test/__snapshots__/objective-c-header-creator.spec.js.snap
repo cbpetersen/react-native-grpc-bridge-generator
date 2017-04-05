@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`creates header output 1`] = `
+"@import Foundation;
+#import <React/RCTBridgeModule.h>
+
+@interface FunService: NSObject <RCTBridgeModule>
+
+@end"
+`;

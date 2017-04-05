@@ -1,16 +1,11 @@
 // @flow
 
-export default (name: string) => {
-  const output = []
+export default (name: string) =>
+`
+@import Foundation;
+#import <React/RCTBridgeModule.h>
 
-  output.push(`@import Foundation;`)
-  output.push(`#import <React/RCTBridgeModule.h>`)
-  output.push(``)
-  output.push(`@interface ${name}: NSObject <RCTBridgeModule>`)
-  output.push(``)
-  output.push(`@end`)
-  output.push(``)
+@interface ${name}: NSObject <RCTBridgeModule>
 
-  return output.join('\n')
-}
-
+@end
+`.trim()
