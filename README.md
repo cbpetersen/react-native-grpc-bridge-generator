@@ -6,9 +6,16 @@ Creating multiple mappers and briges for react native to a grpc service is painf
 
 To create the brige file run
 
-```$ babel test/test-samples/grpc-sample.proto```
+```
+$ babel test/test-samples/grpc-sample.proto
+```
 
-this will create a file named `ios.m` file ready to use as a bridge.
+This will create a files ready to use as a bridge.
+
+```
+output/grpcSample.h
+output/grpcSample.m
+```
 
 ## Next Steps
 

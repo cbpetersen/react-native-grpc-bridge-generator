@@ -1,19 +1,27 @@
+// @flow
+
 import fs from 'fs'
-var args = require('yargs').argv
+import { argv } from 'yargs'
+import path from 'path'
+import iosHeaderCreator from './src/objective-c-header-creator'
+import schema from 'protocol-buffers-schema'
 import ios from './src/objective-c-parser'
-var schema = require('protocol-buffers-schema')
 
-console.log(args._)
+const protoFile = argv._[0]
+const protoFileName = path.basename(protoFile, path.extname(protoFile))
 
-const file = fs.readFileSync(args._[0], 'utf-8')
+const file = fs.readFileSync(protoFile, 'utf-8')
+
 const fileSchema = schema.parse(file)
-const iosResult = ios(fileSchema)
+const iosBridgeFile = ios(fileSchema)
+const iosBridgeHeaderFile = iosHeaderCreator(protoFileName)
 
 if (!fs.existsSync('output')) {
   fs.mkdirSync('output')
 }
 
-fs.writeFileSync('./output/ios.m', iosResult, {encoding: 'utf-8'})
+fs.writeFileSync(`./output/${protoFileName}.h`, iosBridgeHeaderFile, {encoding: 'utf-8'})
+fs.writeFileSync(`./output/${protoFileName}.m`, iosBridgeFile, {encoding: 'utf-8'})
 console.log('')
 console.log('')
-console.log(iosResult)
+console.log(iosBridgeFile)
