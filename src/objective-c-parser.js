@@ -90,21 +90,17 @@ NSMutableArray* mapDrivers(Driver* obj)
 {
 }
 */
-const generateArrayMappers = (field: Field, schema: Schema) => {
-  const output = []
-  const indention = 2
+const generateArrayMappers = (field: Field, schema: Schema) =>
+`
+static inline NSMutableArray* map${field.type}s(NSMutableArray* input) {
+  NSMutableArray *output = [[NSMutableArray alloc] init];
+  for (${field.type} *obj in input) {
+    [output addObject: map${field.type}(obj)];
+  }
 
-  output.push(`${indent(0)}static inline NSMutableArray* map${field.type}s(NSMutableArray* input) {`)
-  output.push(`${indent(indention)}NSMutableArray *output = [[NSMutableArray alloc] init];`)
-  output.push(`${indent(indention)}for (${field.type} *obj in input) {`)
-  output.push(`${indent(indention + 2)}[output addObject: map${field.type}(obj)];`)
-  output.push(`${indent(indention)}}`)
-  output.push(``)
-  output.push(`${indent(indention)}return output;`)
-  output.push(`${indent(0)}}`)
-
-  return output.join('\n')
+  return output;
 }
+`.trim()
 
 /*
 to generate
