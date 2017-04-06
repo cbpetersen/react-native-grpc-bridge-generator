@@ -4,7 +4,8 @@ exports[`creates header output 1`] = `
 "@import Foundation;
 #import <React/RCTBridgeModule.h>
 
-@interface FunService: NSObject <RCTBridgeModule>
+@interface FunServiceBridgeModule: NSObject <RCTBridgeModule>
+- (instancetype)initWithHost:(NSString *)host NS_DESIGNATED_INITIALIZER;
 
 @end"
 `;

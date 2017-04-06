@@ -1,6 +1,7 @@
 // @flow
 
 import camelCase from 'lodash.camelcase'
+import { moduleName } from './utils'
 
 type EnumValue = {
   value: number,
@@ -196,8 +197,33 @@ ${methodOutput}
   return output.join('\n')
 }
 
+const generateFileConstructor = (name: string) => `
+#import "${moduleName(name)}.h"
+#import <GRPCClient/GRPCCall+Tests.h>
+#import "${name}.pbrpc.h"
+#import <react/RCTConvert.h>
+
+@implementation ${moduleName(name)}
+
+${name} *_service;
+
+- (instancetype)initWithHost:(NSString *)host {
+  if (self = [super init]) {
+    [GRPCCall useInsecureConnectionsForHost:host];
+
+    _service = [[${name} alloc] initWithHost:host];
+  }
+
+  return self;
+}
+
+RCT_EXPORT_MODULE(${moduleName(name)});
+\n`.trim()
+
 export default (schema: Schema) => {
   const output = []
+
+  output.push(generateFileConstructor(schema.services[0].name))
 
   schema.messages.forEach((message) => {
     output.push(generateMessageMappers(message, schema))
@@ -213,6 +239,8 @@ export default (schema: Schema) => {
     const serviceOutput = generateServiceOutput(service, schema)
     output.push(serviceOutput)
   }, this)
+
+  output.push(`@end`)
 
   return output.join('\n\n')
 }
