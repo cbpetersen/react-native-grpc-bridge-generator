@@ -2,62 +2,56 @@
 
 exports[`creates multiple nested messages sample output 1`] = `
 "static inline NSDictionary* mapCoordinate(Coordinate* obj) {
-  return @{ 
+  return @{
     @\\"lat\\": @(obj.lat),
     @\\"lng\\": @(obj.lng)
   };
 }
 
-
 static inline NSDictionary* mapLocation(Location* obj) {
-  return @{ 
+  return @{
     @\\"coordinate\\": mapCoordinate(obj.coordinate),
     @\\"addressString\\": obj.addressString ?: [NSNull null]
   };
 }
 
-
 static inline NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
-  return @{ 
+  return @{
     @\\"coordinate\\": mapCoordinate(obj.coordinate),
     @\\"query\\": obj.query ?: [NSNull null]
   };
 }
 
-
 static inline NSDictionary* mapSearchLocationsRequest(SearchLocationsRequest* obj) {
-  return @{ 
+  return @{
     @\\"lat\\": @(obj.lat),
     @\\"lng\\": @(obj.lng)
   };
 }
 
-
 static inline NSDictionary* mapPlaces(Places* obj) {
-  return @{ 
+  return @{
     @\\"locations\\": mapLocations(obj.locationsArray)
   };
 }
 
-
 static inline SearchPlacesRequest* mapToGRPCSearchPlacesRequest(NSDictionary* input) {
   SearchPlacesRequest *output = [[SearchPlacesRequest alloc] init];
 
-  output.query = [RCTConvert NSString:input[@\\"query\\"]];
+    output.query = [RCTConvert NSString:input[@\\"query\\"]];
   return output;
 }
 
 static inline SearchLocationsRequest* mapToGRPCSearchLocationsRequest(NSDictionary* input) {
   SearchLocationsRequest *output = [[SearchLocationsRequest alloc] init];
-  output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
-  output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
+    output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
+    output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
   return output;
 }
 
 RCT_EXPORT_METHOD(searchPlaces:(NSDictionary *)input
   resolver:(RCTPromiseResolveBlock) resolve
   rejecter:(RCTPromiseRejectBlock) reject) {
-
   [_service searchPlacesWithRequest:mapToGRPCSearchPlacesRequest(input) handler:^(Places *response, NSError *error) {
     if (error) {
       reject([@(error.code) stringValue], error.description, error);
@@ -73,7 +67,6 @@ RCT_EXPORT_METHOD(searchPlaces:(NSDictionary *)input
 RCT_EXPORT_METHOD(searchLocations:(NSDictionary *)input
   resolver:(RCTPromiseResolveBlock) resolve
   rejecter:(RCTPromiseRejectBlock) reject) {
-
   [_service searchLocationsWithRequest:mapToGRPCSearchLocationsRequest(input) handler:^(Location *response, NSError *error) {
     if (error) {
       reject([@(error.code) stringValue], error.description, error);
@@ -90,57 +83,52 @@ RCT_EXPORT_METHOD(searchLocations:(NSDictionary *)input
 
 exports[`creates multiple service sample output 1`] = `
 "static inline NSDictionary* mapLocation(Location* obj) {
-  return @{ 
+  return @{
     @\\"lat\\": @(obj.lat),
     @\\"lng\\": @(obj.lng),
     @\\"addressString\\": obj.addressString ?: [NSNull null]
   };
 }
 
-
 static inline NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
-  return @{ 
+  return @{
     @\\"lat\\": @(obj.lat),
     @\\"lng\\": @(obj.lng),
     @\\"query\\": obj.query ?: [NSNull null]
   };
 }
 
-
 static inline NSDictionary* mapSearchLocationsRequest(SearchLocationsRequest* obj) {
-  return @{ 
+  return @{
     @\\"lat\\": @(obj.lat),
     @\\"lng\\": @(obj.lng)
   };
 }
 
-
 static inline NSDictionary* mapPlaces(Places* obj) {
-  return @{ 
+  return @{
     @\\"Locations\\": mapLocations(obj.LocationsArray)
   };
 }
 
-
 static inline SearchPlacesRequest* mapToGRPCSearchPlacesRequest(NSDictionary* input) {
   SearchPlacesRequest *output = [[SearchPlacesRequest alloc] init];
-  output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
-  output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
-  output.query = [RCTConvert NSString:input[@\\"query\\"]];
+    output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
+    output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
+    output.query = [RCTConvert NSString:input[@\\"query\\"]];
   return output;
 }
 
 static inline SearchLocationsRequest* mapToGRPCSearchLocationsRequest(NSDictionary* input) {
   SearchLocationsRequest *output = [[SearchLocationsRequest alloc] init];
-  output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
-  output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
+    output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
+    output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
   return output;
 }
 
 RCT_EXPORT_METHOD(searchPlaces:(NSDictionary *)input
   resolver:(RCTPromiseResolveBlock) resolve
   rejecter:(RCTPromiseRejectBlock) reject) {
-
   [_service searchPlacesWithRequest:mapToGRPCSearchPlacesRequest(input) handler:^(Places *response, NSError *error) {
     if (error) {
       reject([@(error.code) stringValue], error.description, error);
@@ -156,7 +144,6 @@ RCT_EXPORT_METHOD(searchPlaces:(NSDictionary *)input
 RCT_EXPORT_METHOD(searchLocations:(NSDictionary *)input
   resolver:(RCTPromiseResolveBlock) resolve
   rejecter:(RCTPromiseRejectBlock) reject) {
-
   [_service searchLocationsWithRequest:mapToGRPCSearchLocationsRequest(input) handler:^(Location *response, NSError *error) {
     if (error) {
       reject([@(error.code) stringValue], error.description, error);
@@ -173,22 +160,20 @@ RCT_EXPORT_METHOD(searchLocations:(NSDictionary *)input
 
 exports[`creates nested sample output 1`] = `
 "static inline NSDictionary* mapLocation(Location* obj) {
-  return @{ 
+  return @{
     @\\"lat\\": @(obj.lat),
     @\\"lng\\": @(obj.lng),
     @\\"addressString\\": obj.addressString ?: [NSNull null]
   };
 }
 
-
 static inline NSDictionary* mapSearchPlacesRequest(SearchPlacesRequest* obj) {
-  return @{ 
+  return @{
     @\\"lat\\": @(obj.lat),
     @\\"lng\\": @(obj.lng),
     @\\"query\\": obj.query ?: [NSNull null]
   };
 }
-
 
 static inline NSMutableArray* mapLocations(NSMutableArray* input) {
   NSMutableArray *output = [[NSMutableArray alloc] init];
@@ -199,25 +184,24 @@ static inline NSMutableArray* mapLocations(NSMutableArray* input) {
   return output;
 }
 
+
 static inline NSDictionary* mapPlaces(Places* obj) {
-  return @{ 
+  return @{
     @\\"Locations\\": mapLocations(obj.LocationsArray)
   };
 }
 
-
 static inline SearchPlacesRequest* mapToGRPCSearchPlacesRequest(NSDictionary* input) {
   SearchPlacesRequest *output = [[SearchPlacesRequest alloc] init];
-  output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
-  output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
-  output.query = [RCTConvert NSString:input[@\\"query\\"]];
+    output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
+    output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
+    output.query = [RCTConvert NSString:input[@\\"query\\"]];
   return output;
 }
 
 RCT_EXPORT_METHOD(searchPlaces:(NSDictionary *)input
   resolver:(RCTPromiseResolveBlock) resolve
   rejecter:(RCTPromiseRejectBlock) reject) {
-
   [_service searchPlacesWithRequest:mapToGRPCSearchPlacesRequest(input) handler:^(Places *response, NSError *error) {
     if (error) {
       reject([@(error.code) stringValue], error.description, error);
@@ -234,33 +218,30 @@ RCT_EXPORT_METHOD(searchPlaces:(NSDictionary *)input
 
 exports[`creates sample output 1`] = `
 "static inline NSDictionary* mapReverseGeocodeRequest(ReverseGeocodeRequest* obj) {
-  return @{ 
+  return @{
     @\\"lat\\": @(obj.lat),
     @\\"lng\\": @(obj.lng)
   };
 }
 
-
 static inline NSDictionary* mapLocation(Location* obj) {
-  return @{ 
+  return @{
     @\\"lat\\": @(obj.lat),
     @\\"lng\\": @(obj.lng),
     @\\"addressString\\": obj.addressString ?: [NSNull null]
   };
 }
 
-
 static inline ReverseGeocodeRequest* mapToGRPCReverseGeocodeRequest(NSDictionary* input) {
   ReverseGeocodeRequest *output = [[ReverseGeocodeRequest alloc] init];
-  output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
-  output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
+    output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
+    output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
   return output;
 }
 
 RCT_EXPORT_METHOD(reverseGeocode:(NSDictionary *)input
   resolver:(RCTPromiseResolveBlock) resolve
   rejecter:(RCTPromiseRejectBlock) reject) {
-
   [_service reverseGeocodeWithRequest:mapToGRPCReverseGeocodeRequest(input) handler:^(Location *response, NSError *error) {
     if (error) {
       reject([@(error.code) stringValue], error.description, error);

@@ -114,8 +114,6 @@ const generateMessageMappers = (message: Message, schema: Schema) => {
   const arrayOutput = []
   const indention = 2
 
-  output.push(`${indent(0)}static inline NSDictionary* map${message.name}(${message.name}* obj) {`)
-  output.push(`${indent(indention)}return @{ `)
   message.fields.forEach((field, innerIndex) => {
     if (field.repeated && !arrayMappers[`${field.type}`]) {
       arrayOutput.push(generateArrayMappers(field, schema))
@@ -126,11 +124,14 @@ const generateMessageMappers = (message: Message, schema: Schema) => {
     output.push(`${indent(0)}${generateFieldOutput(field, schema, 'obj', indention + 2, innerIndex, message.fields.length)}`)
   }, this)
 
-  output.push(`${indent(indention)}};`)
-  output.push(`}`)
-  output.push(``)
+  return `
+${arrayOutput.join('\n')}
 
-  return arrayOutput.concat(output).join('\n')
+static inline NSDictionary* map${message.name}(${message.name}* obj) {
+  return @{
+${output.join('\n')}
+  };
+}`.trim()
 }
 
 const mapRequestFields = (field: Field, schema: Schema, indention, index, length) => {
@@ -147,17 +148,16 @@ const generateRequestMapping = (message: Message, schema: Schema) => {
   const output = []
   const indention = 2
 
-  output.push(`${indent(0)}static inline ${message.name}* mapToGRPC${message.name}(NSDictionary* input) {`)
-  output.push(`${indent(indention)}${message.name} *output = [[${message.name} alloc] init];`)
-
   message.fields.forEach((field, innerIndex) => {
-    output.push(mapRequestFields(field, schema, indention, innerIndex, message.fields.length))
+    output.push(mapRequestFields(field, schema, indention + 2, innerIndex, message.fields.length))
   }, this)
 
-  output.push(`${indent(indention)}return output;`)
-  output.push(`${indent(0)}}`)
-
-  return output.join('\n')
+  return `
+static inline ${message.name}* mapToGRPC${message.name}(NSDictionary* input) {
+  ${message.name} *output = [[${message.name} alloc] init];
+${output.join('\n')}
+  return output;
+}`.trim()
 }
 
 const generateMethodOutput = (method: Method, schema: Schema, indention) => {
@@ -174,21 +174,22 @@ const generateServiceOutput = (service: Service, schema: Schema) => {
     const methodOutput = generateMethodOutput(method, schema, 4)
     const inputMessageType = schema.messages.find(msg => msg.name === method.input_type)
 
-    output.push(`RCT_EXPORT_METHOD(${camelCase(method.name)}:(NSDictionary *)input`)
-    output.push(`${indent(2)}resolver:(RCTPromiseResolveBlock) resolve`)
-    output.push(`${indent(2)}rejecter:(RCTPromiseRejectBlock) reject) {`)
-    output.push(``)
-    output.push(`${indent(2)}[_service ${camelCase(method.name)}WithRequest:mapToGRPC${inputMessageType.name}(input) handler:^(${method.output_type} *response, NSError *error) {`)
-    output.push(`${indent(4)}if (error) {`)
-    output.push(`${indent(6)}reject([@(error.code) stringValue], error.description, error);`)
-    output.push(`${indent(6)}return;`)
-    output.push(`${indent(4)}}`)
-    output.push(``)
-    output.push(`${indent(4)}NSLog(@"native ${method.name}: %@", response);`)
-    output.push(``)
-    output.push(`${methodOutput}`)
-    output.push(`${indent(2)}}];`)
-    output.push(`}`)
+    output.push(`
+RCT_EXPORT_METHOD(${camelCase(method.name)}:(NSDictionary *)input
+  resolver:(RCTPromiseResolveBlock) resolve
+  rejecter:(RCTPromiseRejectBlock) reject) {
+  [_service ${camelCase(method.name)}WithRequest:mapToGRPC${inputMessageType.name}(input) handler:^(${method.output_type} *response, NSError *error) {
+    if (error) {
+      reject([@(error.code) stringValue], error.description, error);
+      return;
+    }
+
+    NSLog(@"native ${method.name}: %@", response);
+
+${methodOutput}
+  }];
+}
+`.trim())
     output.push(``)
   }, this)
 
