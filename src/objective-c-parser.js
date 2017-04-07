@@ -1,7 +1,7 @@
 // @flow
 
 import camelCase from 'lodash.camelcase'
-import { moduleName } from './utils'
+import { moduleName, mapReservedKeyword } from './utils'
 
 type EnumValue = {
   value: number,
@@ -69,19 +69,20 @@ const append = (index: number, length: number) => isLast(index, length) ? '' : '
 const isLast = (index, length) => index >= length - 1
 
 const generateFieldOutput = (field: Field, schema: Schema, fieldPath: string, indention, index, length) => {
+  const fieldName = mapReservedKeyword(field.name)
   if (primitiveTypes.some(type => type === field.type)) {
     if (field.type === 'string') {
-      return `${indent(indention)}@"${field.name}": ${fieldPath}.${field.name} ?: [NSNull null]${append(index, length)}`
+      return `${indent(indention)}@"${field.name}": ${fieldPath}.${fieldName} ?: [NSNull null]${append(index, length)}`
     }
 
-    return `${indent(indention)}@"${field.name}": @(${fieldPath}.${field.name})${append(index, length)}`
+    return `${indent(indention)}@"${field.name}": @(${fieldPath}.${fieldName})${append(index, length)}`
   }
 
   if (field.repeated) {
-    return `${indent(indention)}@"${field.name}": map${field.type}s(${fieldPath}.${field.name}Array)${append(index, length)}`
+    return `${indent(indention)}@"${field.name}": map${field.type}s(${fieldPath}.${fieldName}Array)${append(index, length)}`
   }
 
-  return `${indent(indention)}@"${field.name}": map${field.type}(${fieldPath}.${field.name})${append(index, length)}`
+  return `${indent(indention)}@"${field.name}": map${field.type}(${fieldPath}.${fieldName})${append(index, length)}`
 }
 
 /*
@@ -136,11 +137,13 @@ ${output.join('\n')}
 }
 
 const mapRequestFields = (field: Field, schema: Schema, indention, index, length) => {
+  const fieldName = mapReservedKeyword(field.name)
+
   if (primitiveTypes.some(type => type === field.type)) {
     if (field.type === 'string') {
-      return `${indent(indention)}output.${field.name} = [RCTConvert NSString:input[@"${field.name}"]];`
+      return `${indent(indention)}output.${fieldName} = [RCTConvert NSString:input[@"${field.name}"]];`
     } else if (field.type === 'double') {
-      return `${indent(indention)}output.${field.name} = [[RCTConvert NSNumber:input[@"${field.name}"]] doubleValue];`
+      return `${indent(indention)}output.${fieldName} = [[RCTConvert NSNumber:input[@"${field.name}"]] doubleValue];`
     }
   }
 }
@@ -221,6 +224,7 @@ RCT_EXPORT_MODULE(${moduleName(name)});
 \n`.trim()
 
 export default (schema: Schema) => {
+  console.log(schema)
   const output = []
 
   output.push(generateFileConstructor(schema.services[0].name))
