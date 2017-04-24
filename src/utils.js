@@ -13,3 +13,7 @@ export const mapReservedKeyword = (fieldName: string) => {
       return fieldName
   }
 }
+
+export const indent = (length: number) => ' '.repeat(length)
+export const append = (index: number, length: number) => isLast(index, length) ? '' : ','
+export const isLast = (index, length) => index >= length - 1

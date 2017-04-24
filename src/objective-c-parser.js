@@ -1,18 +1,12 @@
 // @flow
 
 import camelCase from 'lodash.camelcase'
-import { moduleName, mapReservedKeyword } from './utils'
-import { Field, Schema, Message, Method, Service } from './types'
-
-const primitiveTypes = ['double', 'float', 'int32', 'int64', 'uint32',
-  'uint64', 'sint32', 'sint64', 'fixed32', 'fixed64', 'sfixed32',
-  'sfixed64', 'bool', 'string', 'bytes']
+import { moduleName, mapReservedKeyword, indent, append } from './utils'
+import { Field, Schema, Message, Method, Service, primitiveTypes } from './types'
 
 const arrayMappers = {}
 
-const indent = (length: number) => ' '.repeat(length)
-const append = (index: number, length: number) => isLast(index, length) ? '' : ','
-const isLast = (index, length) => index >= length - 1
+
 
 const generateFieldOutput = (field: Field, schema: Schema, fieldPath: string, indention, index, length) => {
   const fieldName = mapReservedKeyword(field.name)
