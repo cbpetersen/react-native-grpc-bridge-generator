@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+package spiri.api.grpc;
+
+service SpiriGrpcService {
+    rpc ReverseGeocode(ReverseGeocodeRequest) returns (Location) {}
+    rpc SearchPlaces(SearchPlacesRequest) returns (Places) {}
+
+    rpc CreateUser(CreateUserRequest) returns (User) {}
+    rpc UpdateUser(UpdateUserRequest) returns (User) {}
+    rpc UpdateDevice(UpdateUserRequest) returns (Device) {}
+
+    rpc Authentication(AuthenticationRequest) returns (User) {}
+    rpc ResetPassword(ResetPasswordRequest) returns (Empty) {}
+
+    rpc CheckPhoneNumberAvailibility(CheckPhoneNumberAvailibilityRequest) returns (AvailibilityResponse) {}
+    rpc CheckEmailAvailibility(CheckEmailAvailibilityRequest) returns (AvailibilityResponse) {}
+
+    rpc VerifiPhone(PhoneVerificationRequest) returns (Empty) {}
+    rpc ResendPhoneVerificationCode(ResendPhoneVerificationCodeRequest) returns (Empty) {}
+}
+
+message AuthenticationRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message ResetPasswordRequest {
+    string email = 1;
+}
+
+message ResendPhoneVerificationCodeRequest {
+    string phoneNumber = 1;
+}
+
+message CheckPhoneNumberAvailibilityRequest {
+    string phoneNumber = 1;
+    string userId = 2;
+}
+
+message AvailibilityResponse {
+    bool exist = 1;
+}
+
+message CheckEmailAvailibilityRequest {
+    string email = 1;
+    string userId = 2;
+}
+
+message PhoneVerificationRequest {
+    string code = 1;
+}
+
+message ReverseGeocodeRequest {
+    double lat = 1;
+    double lng = 2;
+}
+
+message CreateUserRequest {
+    string email = 1;
+    string firstName = 2;
+    string lastName = 3;
+    string password = 4;
+    string phone = 5;
+    Device device = 6;
+    string language = 7;
+}
+
+message Location {
+    double lat = 1;
+    double lng = 2;
+    string addressString = 3;
+}
+
+message SearchPlacesRequest {
+    double lat = 1;
+    double lng = 2;
+    string query = 3;
+}
+
+message Places {
+    repeated Location locations = 1;
+}
+
+message User {
+    string accessToken = 1;
+    string createdAt = 2;
+    string email = 3;
+    string firstName = 4;
+    string lastName = 5;
+    string password = 6;
+    string phone = 7;
+    string phonePrefix = 8;
+    string id = 9;
+    Device device = 10;
+    string language = 11;
+}
+
+message UpdateUserRequest {
+    string email = 1;
+    string firstName = 2;
+    string lastName = 3;
+    string password = 4;
+    string phone = 5;
+    string id = 6;
+    string language = 7;
+}
+
+message UpdateDevice {
+    string id = 1;
+    string make = 2;
+    string model = 3;
+    string osName = 4;
+    string appName = 5;
+    string appVersion = 6;
+    string createdAt = 7;
+    string pushNotificationToken = 8;
+    string installationIdentifier = 9;
+    string userId = 10;
+}
+
+message Device {
+    string id = 1;
+    string make = 2;
+    string model = 3;
+    string osName = 4;
+    string appName = 5;
+    string appVersion = 6;
+    string createdAt = 7;
+    string pushNotificationToken = 8;
+    string installationIdentifier = 9;
+}
+
+message Driver {
+    string accessToken = 1;
+    string createdAt = 2;
+    string email = 3;
+    string firstName = 4;
+    string lastName = 5;
+    string password = 6;
+    string phone = 7;
+    string phonePrefix = 8;
+    string id = 9;
+    Device device = 10;
+    string language = 11;
+}
+
+message Empty {}
