@@ -10,20 +10,16 @@ ${fields}
 }
 `.trim()
 
-export const generateField = (field: Field, indention: number, index: number, length: number) => {
-  if (primitiveTypes.some(type => type === field.type)) {
-    if (field.repeated) {
-      return `${indent(indention)}${field.name}: Array<${ProtoToJsTypeMapping[field.type]}>${append(index, length)}`
-    }
+export const repeatedTemplate = (type: string) => `Array<${type}>`
 
-    return `${indent(indention)}${field.name}: ${ProtoToJsTypeMapping[field.type]}${append(index, length)}`
-  }
+export const generateField = (field: Field, indention: number, index: number, length: number) => {
+  let type = ProtoToJsTypeMapping[field.type] || field.type
 
   if (field.repeated) {
-    return `${indent(indention)}${field.name}: Array<${field.type}>${append(index, length)}`
+    type = repeatedTemplate(type)
   }
 
-  return `${indent(indention)}${field.name}: ${field.type}${append(index, length)}`
+  return `${indent(indention)}${field.name}: ${type}${append(index, length)}`
 }
 
 export const messageMapper = (message: Message) => {
