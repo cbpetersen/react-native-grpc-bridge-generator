@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generateField creates a primitive value definition 1`] = `"  addressString: string"`;
+
+exports[`generateField creates a repeated primitive value definition 1`] = `"  addressStrings: Array<string>"`;
+
+exports[`generateField creates a repeated type definition 1`] = `"  Places: Array<Location>"`;
+
+exports[`generateField creates a type definition 1`] = `"  Place: Location"`;
+
+exports[`generateFlowType creates an empty flow type definition 1`] = `
+"export type Empty = {
+
+}"
+`;
+
+exports[`generateFlowType creates an flow type definition 1`] = `
+"export type Empty = {
+  name: string
+}"
+`;
+
+exports[`generator creates a hole flow type definition file output 1`] = `
+"// @flow
+
+export type Location = {
+  addressString: string,
+  lat: number,
+  lng: number
+}
+
+export type Places = {
+  locations: Array<Location>
+}"
+`;
+
+exports[`messageMapper creates a flow type definition 1`] = `
+"export type Location = {
+  addressString: string,
+  lat: number,
+  lng: number
+}"
+`;
