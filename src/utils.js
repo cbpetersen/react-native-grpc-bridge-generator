@@ -1,5 +1,27 @@
 // @flow
 
+export const primitiveTypes = ['double', 'float', 'int32', 'int64', 'uint32',
+  'uint64', 'sint32', 'sint64', 'fixed32', 'fixed64', 'sfixed32',
+  'sfixed64', 'bool', 'string', 'bytes']
+
+export const ProtoToJsTypeMapping = {
+  double: 'number',
+  float: 'number',
+  int64: 'number',
+  uint64: 'number',
+  int32: 'number',
+  fixed64: 'number',
+  fixed32: 'number',
+  bool: 'boolean',
+  string: 'string',
+  bytes: 'ByteBuffer',
+  uint32: 'number',
+  sfixed32: 'number',
+  sfixed64: 'number',
+  sint32: 'number',
+  sint64: 'number'
+}
+
 export const moduleName = (name: string) => `${name}BridgeModule`
 
 export const fileName = (name: string) => moduleName(name)
@@ -16,4 +38,4 @@ export const mapReservedKeyword = (fieldName: string) => {
 
 export const indent = (length: number) => ' '.repeat(length)
 export const append = (index: number, length: number) => isLast(index, length) ? '' : ','
-export const isLast = (index, length) => index >= length - 1
+export const isLast = (index: number, length: number) => index >= length - 1

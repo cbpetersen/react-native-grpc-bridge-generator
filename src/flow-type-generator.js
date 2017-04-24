@@ -1,6 +1,7 @@
+// @flow
 
-import { indent, append } from './utils'
-import { Field, Schema, Message, primitiveTypes, ProtoToJsTypeMapping } from './types'
+import { indent, append, primitiveTypes, ProtoToJsTypeMapping } from './utils'
+import type { Field, Schema, Message } from './types'
 
 export const generateFlowType = (name: string, fields: string) =>
 `
@@ -9,7 +10,7 @@ ${fields}
 }
 `.trim()
 
-export const generateField = (field: Field, indention, index, length) => {
+export const generateField = (field: Field, indention: number, index: number, length: number) => {
   if (primitiveTypes.some(type => type === field.type)) {
     if (field.repeated) {
       return `${indent(indention)}${field.name}: Array<${ProtoToJsTypeMapping[field.type]}>${append(index, length)}`

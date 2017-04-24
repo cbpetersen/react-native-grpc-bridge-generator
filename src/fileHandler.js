@@ -4,6 +4,7 @@ import fs from 'fs'
 import iosHeaderCreator from './objective-c-header-creator'
 import schema from 'protocol-buffers-schema'
 import ios from './objective-c-parser'
+import flowTypes from './flow-type-generator'
 import { fileName } from './utils'
 
 export default (protoFile: string) => {

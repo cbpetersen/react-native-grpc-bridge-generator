@@ -1,12 +1,10 @@
 // @flow
 
 import camelCase from 'lodash.camelcase'
-import { moduleName, mapReservedKeyword, indent, append } from './utils'
-import { Field, Schema, Message, Method, Service, primitiveTypes } from './types'
+import { moduleName, mapReservedKeyword, indent, append, primitiveTypes } from './utils'
+import type { Field, Schema, Message, Method, Service } from './types'
 
 const arrayMappers = {}
-
-
 
 const generateFieldOutput = (field: Field, schema: Schema, fieldPath: string, indention, index, length) => {
   const fieldName = mapReservedKeyword(field.name)
@@ -116,7 +114,11 @@ const generateServiceOutput = (service: Service, schema: Schema) => {
 
   service.methods.forEach((method) => {
     const methodOutput = generateMethodOutput(method, schema, 4)
-    const inputMessageType = schema.messages.find(msg => msg.name === method.input_type)
+    const inputMessageType: ?Message = schema.messages.find(msg => msg.name === method.input_type)
+
+    if (!inputMessageType) {
+      throw new Error(`${method.input_type} Message type not found in the schema`)
+    }
 
     output.push(`
 RCT_EXPORT_METHOD(${camelCase(method.name)}:(NSDictionary *)input
@@ -175,7 +177,11 @@ export default (schema: Schema) => {
 
   schema.services.forEach((service) => {
     service.methods.forEach((method) => {
-      const inputMessageType = schema.messages.find(msg => msg.name === method.input_type)
+      const inputMessageType: ?Message = schema.messages.find(msg => msg.name === method.input_type)
+      if (!inputMessageType) {
+        throw new Error(`${method.input_type} Message type not found in the schema`)
+      }
+
       const requestMappingOutput = generateRequestMapping(inputMessageType, schema, 4)
       output.push(requestMappingOutput)
     }, this)
