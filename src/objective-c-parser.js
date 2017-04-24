@@ -2,61 +2,7 @@
 
 import camelCase from 'lodash.camelcase'
 import { moduleName, mapReservedKeyword } from './utils'
-
-type EnumValue = {
-  value: number,
-  options: Object
-}
-
-type Enum = {
-  name: string,
-  values: Array<EnumValue>,
-  options: Object
-}
-
-type Field = {
-  name: string,
-  type: string,
-  tag: number,
-  map: string,
-  oneof: string,
-  required: boolean,
-  repeated: boolean,
-  options: {}
-}
-
-type Message = {
-  name: string,
-  enums: [],
-  extends: [],
-  messages: Array<Message>,
-  fields: Array<Field>,
-  extensions: Message
-}
-
-type Method = {
-  name: string,
-  input_type: string,
-  output_type: string,
-  client_streaming: boolean,
-  server_streaming: boolean,
-  options: Object
-}
-
-type Service = {
-  name: string,
-  methods: Array<Method>,
-  options: Object
-}
-
-type Schema = {
-  syntax: number,
-  package: string,
-  imports: Array,
-  enums: Array<Enum>,
-  messages: Array<Message>,
-  services: Array<Service>
-}
+import { Field, Schema, Message, Method, Service } from './types'
 
 const primitiveTypes = ['double', 'float', 'int32', 'int64', 'uint32',
   'uint64', 'sint32', 'sint64', 'fixed32', 'fixed64', 'sfixed32',
