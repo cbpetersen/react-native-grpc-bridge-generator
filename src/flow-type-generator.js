@@ -1,6 +1,6 @@
 // @flow
 
-import { indent, append, primitiveTypes, ProtoToJsTypeMapping } from './utils'
+import { indent, append, ProtoToJsTypeMapping } from './utils'
 import type { Field, Schema, Message } from './types'
 
 export const generateFlowType = (name: string, fields: string) =>

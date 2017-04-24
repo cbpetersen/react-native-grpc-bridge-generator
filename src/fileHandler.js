@@ -5,6 +5,7 @@ import iosHeaderCreator from './objective-c-header-creator'
 import schema from 'protocol-buffers-schema'
 import ios from './objective-c-parser'
 import flowTypes from './flow-type-generator'
+import reactActionCreators from './react-action-creator-generator'
 import { fileName } from './utils'
 
 export default (protoFile: string) => {
@@ -20,9 +21,12 @@ export default (protoFile: string) => {
 
   fs.writeFileSync(`output/${fileName(protoFileName)}.h`, iosBridgeHeaderFile, {encoding: 'utf-8'})
   fs.writeFileSync(`output/${fileName(protoFileName)}.m`, iosBridgeFile, {encoding: 'utf-8'})
+  fs.writeFileSync(`output/${fileName(protoFileName)}-flow-types.js`, flowTypes(fileSchema), {encoding: 'utf-8'})
+  fs.writeFileSync(`output/${fileName(protoFileName)}-actions.js`, reactActionCreators(fileSchema), {encoding: 'utf-8'})
 
-  console.log(fileSchema)
+  // console.log(fileSchema)
   console.log('')
   console.log('')
-  console.log(iosBridgeFile)
+  // console.log(iosBridgeFile)
+  console.log(reactActionCreators(fileSchema))
 }

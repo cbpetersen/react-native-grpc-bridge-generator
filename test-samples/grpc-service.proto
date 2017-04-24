@@ -13,8 +13,8 @@ service SpiriGrpcService {
     rpc Authentication(AuthenticationRequest) returns (User) {}
     rpc ResetPassword(ResetPasswordRequest) returns (Empty) {}
 
-    rpc CheckPhoneNumberAvailibility(CheckPhoneNumberAvailibilityRequest) returns (AvailibilityResponse) {}
-    rpc CheckEmailAvailibility(CheckEmailAvailibilityRequest) returns (AvailibilityResponse) {}
+    rpc CheckPhoneNumberAvailability(CheckPhoneNumberAvailabilityRequest) returns (AvailabilityResponse) {}
+    rpc CheckEmailAvailability(CheckEmailAvailabilityRequest) returns (AvailabilityResponse) {}
 
     rpc VerifiPhone(PhoneVerificationRequest) returns (Empty) {}
     rpc ResendPhoneVerificationCode(ResendPhoneVerificationCodeRequest) returns (Empty) {}
@@ -33,16 +33,16 @@ message ResendPhoneVerificationCodeRequest {
     string phoneNumber = 1;
 }
 
-message CheckPhoneNumberAvailibilityRequest {
+message CheckPhoneNumberAvailabilityRequest {
     string phoneNumber = 1;
     string userId = 2;
 }
 
-message AvailibilityResponse {
+message AvailabilityResponse {
     bool exist = 1;
 }
 
-message CheckEmailAvailibilityRequest {
+message CheckEmailAvailabilityRequest {
     string email = 1;
     string userId = 2;
 }

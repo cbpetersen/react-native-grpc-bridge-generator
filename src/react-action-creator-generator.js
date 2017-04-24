@@ -1,0 +1,36 @@
+// @flow
+
+import { actionCreatorName, actionCreatorRequestName, actionCreatorSuccessName, actionCreatorFailedName } from './utils'
+import type { Schema } from './types'
+
+export const generateActionCreator = (name: string, type: string) =>
+`
+export const ${actionCreatorName(name)} = (payload: ${type}) => ({
+  meta: {
+    delivery: 'grpc',
+    successType: '${actionCreatorSuccessName(name)}',
+    failureType: '${actionCreatorFailedName(name)}'
+  },
+  type: '${actionCreatorRequestName(name)}',
+  payload
+})
+`.trim()
+
+export const generateFileHeader = () => `// @flow`.trim()
+
+export default (schema: Schema) => {
+  const fileOutput = []
+  const output = []
+  const types = []
+  schema.services.forEach((service) => {
+    service.methods.forEach((method) => {
+      types.push(method.input_type)
+      output.push(generateActionCreator(method.name, method.input_type))
+    }, this)
+  }, this)
+
+  fileOutput.push(generateFileHeader())
+  fileOutput.push(`import { ${types.join(', ')} } from './SpiriGrpcServiceBridgeModule-flow-types'`)
+
+  return fileOutput.concat(output).join('\n\n')
+}
