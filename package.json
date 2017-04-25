@@ -26,6 +26,9 @@
   "standard": {
     "parser": "babel-eslint"
   },
+  "jest": {
+    "coverageDirectory": "./coverage/"
+  },
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-cli": "^6.24.0",

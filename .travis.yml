@@ -5,8 +5,9 @@ node_js:
   - "6"
 install:
   - npm install
+  - npm install -g codecov
   - npm run flow-typed-install
 script:
-  - npm test -- --coverage
+  - npm test -- --coverage && codecov
   - npm run lint
   - npm run flow-check
