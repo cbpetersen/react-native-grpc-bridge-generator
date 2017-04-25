@@ -6,6 +6,7 @@ import schema from 'protocol-buffers-schema'
 import ios from './objective-c-parser'
 import flowTypes from './flow-type-generator'
 import reactActionCreators from './react-action-creator-generator'
+import apiClient from './react-native-api-client-generator'
 import { fileName } from './utils'
 
 export default (protoFile: string) => {
@@ -23,10 +24,11 @@ export default (protoFile: string) => {
   fs.writeFileSync(`output/${fileName(protoFileName)}.m`, iosBridgeFile, {encoding: 'utf-8'})
   fs.writeFileSync(`output/${fileName(protoFileName)}-flow-types.js`, flowTypes(fileSchema), {encoding: 'utf-8'})
   fs.writeFileSync(`output/${fileName(protoFileName)}-actions.js`, reactActionCreators(fileSchema), {encoding: 'utf-8'})
+  fs.writeFileSync(`output/${fileName(protoFileName)}-react-native-api-client.js`, apiClient(fileSchema), {encoding: 'utf-8'})
 
   // console.log(fileSchema)
   console.log('')
   console.log('')
   // console.log(iosBridgeFile)
-  console.log(reactActionCreators(fileSchema))
+  console.log(apiClient(fileSchema))
 }

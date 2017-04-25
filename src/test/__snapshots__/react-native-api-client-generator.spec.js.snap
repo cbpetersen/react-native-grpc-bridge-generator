@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generateActionCreator a api function 1`] = `"export const reverseGeocode = (payload: ReverseGeocodeRequest): Location|ApiError => NativeModules.GrpcServiceBridgeModule.reverseGeocode(payload)"`;
+
+exports[`generateFileHeader creates a file definition 1`] = `
+"// @flow
+
+import { NativeModules } from 'react-native'"
+`;
+
+exports[`generator creates a hole flow type definition file output 1`] = `
+"// @flow
+
+import { NativeModules } from 'react-native'
+
+import type { ApiError, ReverseGeocodeRequest, Location } from './SpiriGrpcServiceBridgeModule-flow-types'
+
+export const reverseGeocode = (payload: ReverseGeocodeRequest): Location|ApiError => NativeModules.GrpcServiceBridgeModule.reverseGeocode(payload)"
+`;
