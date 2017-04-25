@@ -37,7 +37,7 @@
     "babel-watch": "^2.0.6",
     "flow": "^0.2.3",
     "flow-bin": "^0.44.2",
-    "flow-typed": "^2.1.1",
+    "flow-typed": "^2.1.2",
     "jest": "^19.0.2",
     "snazzy": "^6.0.0",
     "standard": "^9.0.2"
