@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generateActionCreator creates a repeated type definition 1`] = `
+"export const GET_USER_GRPC_REQUEST = 'GET_USER_GRPC_REQUEST'
+export const GET_USER_GRPC_SUCCESS = 'GET_USER_GRPC_SUCCESS'
+export const GET_USER_GRPC_FAILED = 'GET_USER_GRPC_FAILED'"
+`;
+
+exports[`generateFileHeader creates a flow type definition 1`] = `"// @flow"`;
+
+exports[`generator creates a hole flow type definition file output 1`] = `
+"// @flow
+
+export const REVERSE_GEOCODE_GRPC_REQUEST = 'REVERSE_GEOCODE_GRPC_REQUEST'
+export const REVERSE_GEOCODE_GRPC_SUCCESS = 'REVERSE_GEOCODE_GRPC_SUCCESS'
+export const REVERSE_GEOCODE_GRPC_FAILED = 'REVERSE_GEOCODE_GRPC_FAILED'"
+`;
