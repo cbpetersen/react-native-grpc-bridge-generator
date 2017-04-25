@@ -24,13 +24,16 @@ export default (schema: Schema) => {
   const types = []
   schema.services.forEach((service) => {
     service.methods.forEach((method) => {
-      types.push(method.input_type)
+      if (!types.some(type => type === method.input_type)) {
+        types.push(method.input_type)
+      }
+
       output.push(generateActionCreator(method.name, method.input_type))
     }, this)
   }, this)
 
   fileOutput.push(generateFileHeader())
-  fileOutput.push(`import { ${types.join(', ')} } from './SpiriGrpcServiceBridgeModule-flow-types'`)
+  fileOutput.push(`import type { ${types.join(', ')} } from './SpiriGrpcServiceBridgeModule-flow-types'`)
 
   return fileOutput.concat(output).join('\n\n')
 }
