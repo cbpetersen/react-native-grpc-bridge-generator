@@ -1,5 +1,5 @@
 // @flow
-import { moduleName } from './utils'
+import { moduleName } from '../utils'
 
 export default (name: string) =>
 `

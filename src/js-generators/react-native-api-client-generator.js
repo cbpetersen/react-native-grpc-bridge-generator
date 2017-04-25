@@ -1,7 +1,7 @@
 // @flow
 
-import { actionCreatorName } from './utils'
-import type { Schema } from './types'
+import { actionCreatorName } from '../utils'
+import type { Schema } from '../types'
 
 export const generateActionCreator = (name: string, inputType: string, responseType: string) =>
 `

@@ -1,8 +1,9 @@
 // @flow
 
 import camelCase from 'lodash.camelcase'
-import { moduleName, mapReservedKeyword, indent, append, primitiveTypes } from './utils'
-import type { Field, Schema, Message, Method, Service } from './types'
+
+import { moduleName, mapReservedKeyword, indent, append, primitiveTypes } from '../utils'
+import type { Field, Schema, Message, Method, Service } from '../types'
 
 const arrayMappers = {}
 

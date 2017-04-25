@@ -1,5 +1,5 @@
 // @flow
-import type { Schema } from './types'
+import type { Schema } from '../types'
 
 export const template = (serviceName: string) => `
 // @flow
