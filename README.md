@@ -4,21 +4,25 @@
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![codecov](https://codecov.io/gh/drivr/react-native-grpc-bridge-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/drivr/react-native-grpc-bridge-generator)
 
-Creating multiple mappers and briges for react native to a grpc service is painful so we created this tool to ease the development pain and automate the step.
+Creating multiple mappers and briges for react native to a grpc service is painful so we created this tool to ease the development pain and automate the procedure.
 
 ## Getting Started
 
 To create the brige file run
 
 ```
-$ babel test/test-samples/grpc-sample.proto
+$ babel test-samples/grpc-sample.proto
 ```
 
-This will create a files ready to use as a bridge.
+This will create a files ready to use for communication
 
 ```
 output/grpcSample.h
 output/grpcSample.m
+output/grpcSample-action-types.js
+output/grpcSample-flow-types.js
+output/grpcSample-actions.js
+output/grpcSample-react-native-api-client.js
 ```
 
 ## Next Steps

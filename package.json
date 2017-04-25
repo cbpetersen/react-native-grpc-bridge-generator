@@ -17,6 +17,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "del": "^2.2.2",
     "lodash.camelcase": "^4.3.0",
     "lodash.snakecase": "4.1.1",
     "pascal-case": "^2.0.1",

@@ -1,6 +1,7 @@
 // @flow
 import snakeCase from 'lodash.snakecase'
 import camelcase from 'lodash.camelcase'
+import pascalcase from 'pascal-case'
 
 export const primitiveTypes = ['double', 'float', 'int32', 'int64', 'uint32',
   'uint64', 'sint32', 'sint64', 'fixed32', 'fixed64', 'sfixed32',
@@ -24,9 +25,11 @@ export const ProtoToJsTypeMapping = {
   sint64: 'number'
 }
 
-export const moduleName = (name: string) => `${name}BridgeModule`
+export const moduleName = (name: string) => `${pascalcase(name)}BridgeModule`
 
-export const fileName = (name: string) => moduleName(name)
+export const fileName = (name: string) => moduleName(pascalcase(name))
+export const jsFileName = (name: string) => camelcase(name)
+
 export const actionCreatorName = (name: string) => camelcase(name)
 export const actionCreatorRequestName = (name: string) => snakeCase(`${name}_grpc_request`).toUpperCase()
 export const actionCreatorSuccessName = (name: string) => snakeCase(`${name}_grpc_success`).toUpperCase()

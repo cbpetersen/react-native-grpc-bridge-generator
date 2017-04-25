@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package spiri.api.grpc;
+package api.grpc;
 
-service SpiriGrpcService {
+service GrpcService {
     rpc ReverseGeocode(ReverseGeocodeRequest) returns (Location) {}
     rpc SearchPlaces(SearchPlacesRequest) returns (Places) {}
 
