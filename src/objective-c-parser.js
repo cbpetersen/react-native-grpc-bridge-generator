@@ -166,7 +166,6 @@ RCT_EXPORT_MODULE(${moduleName(name)});
 \n`.trim()
 
 export default (schema: Schema) => {
-  console.log(schema)
   const output = []
 
   output.push(generateFileConstructor(schema.services[0].name))

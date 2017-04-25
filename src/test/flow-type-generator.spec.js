@@ -110,4 +110,3 @@ describe('generator', () => {
     expect(rsp).toMatchSnapshot()
   })
 })
-

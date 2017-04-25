@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generateActionCreator creates a repeated type definition 1`] = `
+"export const getUser = (payload: GetUser) => ({
+  meta: {
+    delivery: 'grpc',
+    successType: 'GET_USER_GRPC_SUCCESS',
+    failureType: 'GET_USER_GRPC_FAILED'
+  },
+  type: 'GET_USER_GRPC_REQUEST',
+  payload
+})"
+`;
+
+exports[`generateFileHeader creates a flow type definition 1`] = `"// @flow"`;
+
+exports[`generator creates a hole flow type definition file output 1`] = `
+"// @flow
+
+import type { ReverseGeocodeRequest } from './SpiriGrpcServiceBridgeModule-flow-types'
+
+export const reverseGeocode = (payload: ReverseGeocodeRequest) => ({
+  meta: {
+    delivery: 'grpc',
+    successType: 'REVERSE_GEOCODE_GRPC_SUCCESS',
+    failureType: 'REVERSE_GEOCODE_GRPC_FAILED'
+  },
+  type: 'REVERSE_GEOCODE_GRPC_REQUEST',
+  payload
+})"
+`;
