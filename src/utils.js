@@ -25,10 +25,10 @@ export const ProtoToJsTypeMapping = {
   sint64: 'number'
 }
 
-export const moduleName = (name: string) => `${pascalcase(name)}BridgeModule`
+export const moduleName = (serviceName: string) => `${pascalcase(serviceName)}BridgeModule`
 
-export const fileName = (name: string) => moduleName(pascalcase(name))
-export const jsFileName = (name: string) => camelcase(name)
+export const fileName = (serviceName: string) => moduleName(pascalcase(serviceName))
+export const jsFileName = (serviceName: string) => camelcase(serviceName)
 
 export const actionCreatorName = (name: string) => camelcase(name)
 export const actionCreatorRequestName = (name: string) => snakeCase(`${name}_grpc_request`).toUpperCase()
