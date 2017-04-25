@@ -31,6 +31,10 @@ export type Location = {
 
 export type Places = {
   locations: Array<Location>
+}
+
+export type ApiError = {
+  message: string
 }"
 `;
 

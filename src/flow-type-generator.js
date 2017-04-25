@@ -33,6 +33,10 @@ export const messageMapper = (message: Message) => {
   return generateFlowType(message.name, output.join('\n'))
 }
 
+export const generateApiErrorType = () => `export type ApiError = {
+  message: string
+}`
+
 export const generateFileHeader = () => `// @flow`.trim()
 
 export default (schema: Schema) => {
@@ -42,6 +46,8 @@ export default (schema: Schema) => {
   schema.messages.forEach((message) => {
     output.push(messageMapper(message))
   }, this)
+
+  output.push(generateApiErrorType())
 
   return output.join('\n\n')
 }
