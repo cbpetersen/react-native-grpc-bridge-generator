@@ -13,17 +13,17 @@ const generateFieldOutput = (field: Field, schema: Schema, fieldPath: string, in
 
   if (primitiveTypes.some(type => type === field.type)) {
     if (field.type === 'string') {
-      return `${indent(indention)}@"${field.name}": ${fieldPath}.${fieldName} ?: [NSNull null]${append(index, length)}`
+      return `${indent(indention)}@"${camelCase(field.name)}": ${fieldPath}.${camelCase(fieldName)} ?: [NSNull null]${append(index, length)}`
     }
 
-    return `${indent(indention)}@"${field.name}": @(${fieldPath}.${fieldName})${append(index, length)}`
+    return `${indent(indention)}@"${camelCase(field.name)}": @(${fieldPath}.${camelCase(fieldName)})${append(index, length)}`
   }
 
   if (field.repeated) {
-    return `${indent(indention)}@"${field.name}": map${objcClassPrefix(schema)}${field.type}s(${fieldPath}.${fieldName}Array)${append(index, length)}`
+    return `${indent(indention)}@"${camelCase(field.name)}": map${objcClassPrefix(schema)}${field.type}s(${fieldPath}.${camelCase(fieldName)}Array)${append(index, length)}`
   }
 
-  return `${indent(indention)}@"${field.name}": map${objcClassPrefix(schema)}${field.type}(${fieldPath}.${fieldName})${append(index, length)}`
+  return `${indent(indention)}@"${camelCase(field.name)}": map${objcClassPrefix(schema)}${field.type}(${fieldPath}.${camelCase(fieldName)})${append(index, length)}`
 }
 
 /*
@@ -82,9 +82,9 @@ const mapRequestFields = (field: Field, schema: Schema, indention, index, length
 
   if (primitiveTypes.some(type => type === field.type)) {
     if (field.type === 'string') {
-      return `${indent(indention)}output.${fieldName} = [RCTConvert NSString:input[@"${field.name}"]];`
+      return `${indent(indention)}output.${camelCase(fieldName)} = [RCTConvert NSString:input[@"${camelCase(field.name)}"]];`
     } else if (field.type === 'double') {
-      return `${indent(indention)}output.${fieldName} = [[RCTConvert NSNumber:input[@"${field.name}"]] doubleValue];`
+      return `${indent(indention)}output.${camelCase(fieldName)} = [[RCTConvert NSNumber:input[@"${camelCase(field.name)}"]] doubleValue];`
     }
   }
 }

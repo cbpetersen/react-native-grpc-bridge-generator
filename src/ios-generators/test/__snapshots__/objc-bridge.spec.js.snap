@@ -151,7 +151,7 @@ static inline NSDictionary* mapSearchLocationsRequest(SearchLocationsRequest* ob
 
 static inline NSDictionary* mapPlaces(Places* obj) {
   return @{
-    @\\"Locations\\": mapLocations(obj.LocationsArray)
+    @\\"locations\\": mapLocations(obj.locationsArray)
   };
 }
 
@@ -254,7 +254,7 @@ static inline NSMutableArray* mapLocations(NSMutableArray* input) {
 
 static inline NSDictionary* mapPlaces(Places* obj) {
   return @{
-    @\\"Locations\\": mapLocations(obj.LocationsArray)
+    @\\"locations\\": mapLocations(obj.locationsArray)
   };
 }
 
