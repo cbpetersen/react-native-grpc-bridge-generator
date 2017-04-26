@@ -3,9 +3,9 @@
 exports[`generator creates the out put with the correct service name 1`] = `
 "// @flow
 
-import * as actions from 'GrpcService-actions'
-import * as actionTypes from 'GrpcService-action-types'
-import * as apiClient from 'GrpcService-api-client'
+import * as actions from './actions'
+import * as actionTypes from './action-types'
+import * as apiClient from './api-client'
 
 const GrpcService = {
   actions,
@@ -19,9 +19,9 @@ module.exports = GrpcService"
 exports[`template creates template 1`] = `
 "// @flow
 
-import * as actions from 'ServiceName123-actions'
-import * as actionTypes from 'ServiceName123-action-types'
-import * as apiClient from 'ServiceName123-api-client'
+import * as actions from './actions'
+import * as actionTypes from './action-types'
+import * as apiClient from './api-client'
 
 const ServiceName123 = {
   actions,

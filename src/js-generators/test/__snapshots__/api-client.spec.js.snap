@@ -13,7 +13,7 @@ exports[`generator creates a hole flow type definition file output 1`] = `
 
 import { NativeModules } from 'react-native'
 
-import type { ApiError, ReverseGeocodeRequest, Location } from './SpiriGrpcServiceBridgeModule-flow-types'
+import type { ApiError, ReverseGeocodeRequest, Location } from './flow-types'
 
 export const reverseGeocode = (payload: ReverseGeocodeRequest): Location|ApiError => NativeModules.GrpcServiceBridgeModule.reverseGeocode(payload)"
 `;

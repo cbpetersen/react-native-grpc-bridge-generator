@@ -15,7 +15,7 @@ exports[`generateFileHeader creates a flow type definition 1`] = `"// @flow"`;
 exports[`generator creates a hole flow type definition file output 1`] = `
 "// @flow
 
-import type { ReverseGeocodeRequest } from './SpiriGrpcServiceBridgeModule-flow-types'
+import type { ReverseGeocodeRequest } from './flow-types'
 
 export const reverseGeocode = (payload: ReverseGeocodeRequest) => ({
   meta: {

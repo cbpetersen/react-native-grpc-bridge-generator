@@ -32,7 +32,7 @@ export default (schema: Schema) => {
   }, this)
 
   fileOutput.push(generateFileHeader())
-  fileOutput.push(`import type { ${types.join(', ')} } from './SpiriGrpcServiceBridgeModule-flow-types'`)
+  fileOutput.push(`import type { ${types.join(', ')} } from './flow-types'`)
 
   return fileOutput.concat(output).join('\n\n')
 }

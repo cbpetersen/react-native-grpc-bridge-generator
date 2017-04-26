@@ -28,14 +28,15 @@ export default (protoFile: string) => {
     del.sync(['output/**'])
     fs.mkdirSync('output')
     fs.mkdirSync('output/js')
+    fs.mkdirSync(`output/js/${jsFileName(protoFileName)}`)
     fs.mkdirSync('output/ios')
   }
 
   fs.writeFileSync(`output/ios/${fileName(protoFileName)}.h`, iosBridgeHeaderFile, {encoding: 'utf-8'})
   fs.writeFileSync(`output/ios/${fileName(protoFileName)}.m`, iosBridgeFile, {encoding: 'utf-8'})
-  fs.writeFileSync(`output/js/${jsFileName(protoFileName)}-flow-types.js`, flowTypes(fileSchema), {encoding: 'utf-8'})
-  fs.writeFileSync(`output/js/${jsFileName(protoFileName)}-actions.js`, reactActionCreators(fileSchema), {encoding: 'utf-8'})
-  fs.writeFileSync(`output/js/${jsFileName(protoFileName)}-action-types.js`, actionTypes(fileSchema), {encoding: 'utf-8'})
-  fs.writeFileSync(`output/js/${jsFileName(protoFileName)}-react-native-api-client.js`, apiClient(fileSchema), {encoding: 'utf-8'})
-  fs.writeFileSync(`output/js/index.js`, indexGen(fileSchema), {encoding: 'utf-8'})
+  fs.writeFileSync(`output/js/${jsFileName(protoFileName)}/flow-types.js`, flowTypes(fileSchema), {encoding: 'utf-8'})
+  fs.writeFileSync(`output/js/${jsFileName(protoFileName)}/actions.js`, reactActionCreators(fileSchema), {encoding: 'utf-8'})
+  fs.writeFileSync(`output/js/${jsFileName(protoFileName)}/action-types.js`, actionTypes(fileSchema), {encoding: 'utf-8'})
+  fs.writeFileSync(`output/js/${jsFileName(protoFileName)}/api-client.js`, apiClient(fileSchema), {encoding: 'utf-8'})
+  fs.writeFileSync(`output/js/${jsFileName(protoFileName)}/index.js`, indexGen(fileSchema), {encoding: 'utf-8'})
 }

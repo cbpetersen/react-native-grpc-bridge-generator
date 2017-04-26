@@ -4,9 +4,9 @@ import type { Schema } from '../types'
 export const template = (serviceName: string) => `
 // @flow
 
-import * as actions from '${serviceName}-actions'
-import * as actionTypes from '${serviceName}-action-types'
-import * as apiClient from '${serviceName}-api-client'
+import * as actions from './actions'
+import * as actionTypes from './action-types'
+import * as apiClient from './api-client'
 
 const ${serviceName} = {
   actions,
