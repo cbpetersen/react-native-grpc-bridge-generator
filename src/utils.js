@@ -3,9 +3,13 @@ import snakeCase from 'lodash.snakecase'
 import camelcase from 'lodash.camelcase'
 import pascalcase from 'pascal-case'
 
+import type { Schema } from './types'
+
 export const primitiveTypes = ['double', 'float', 'int32', 'int64', 'uint32',
   'uint64', 'sint32', 'sint64', 'fixed32', 'fixed64', 'sfixed32',
   'sfixed64', 'bool', 'string', 'bytes']
+
+const classPrefixOption = 'objc_class_prefix'
 
 export const ProtoToJsTypeMapping = {
   double: 'number',
@@ -24,6 +28,8 @@ export const ProtoToJsTypeMapping = {
   sint32: 'number',
   sint64: 'number'
 }
+
+export const objcClassPrefix = (schema: Schema) => schema.options[classPrefixOption] || ''
 
 export const moduleName = (serviceName: string) => `${pascalcase(serviceName)}BridgeModule`
 

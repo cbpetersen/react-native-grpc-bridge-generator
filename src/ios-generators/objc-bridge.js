@@ -2,13 +2,15 @@
 
 import camelCase from 'lodash.camelcase'
 
-import { moduleName, mapReservedKeyword, indent, append, primitiveTypes } from '../utils'
+import { moduleName, mapReservedKeyword, indent, append, primitiveTypes, objcClassPrefix } from '../utils'
 import type { Field, Schema, Message, Method, Service } from '../types'
 
 const arrayMappers = {}
 
+
 const generateFieldOutput = (field: Field, schema: Schema, fieldPath: string, indention, index, length) => {
   const fieldName = mapReservedKeyword(field.name)
+
   if (primitiveTypes.some(type => type === field.type)) {
     if (field.type === 'string') {
       return `${indent(indention)}@"${field.name}": ${fieldPath}.${fieldName} ?: [NSNull null]${append(index, length)}`
@@ -18,10 +20,10 @@ const generateFieldOutput = (field: Field, schema: Schema, fieldPath: string, in
   }
 
   if (field.repeated) {
-    return `${indent(indention)}@"${field.name}": map${field.type}s(${fieldPath}.${fieldName}Array)${append(index, length)}`
+    return `${indent(indention)}@"${field.name}": map${objcClassPrefix(schema)}${field.type}s(${fieldPath}.${fieldName}Array)${append(index, length)}`
   }
 
-  return `${indent(indention)}@"${field.name}": map${field.type}(${fieldPath}.${fieldName})${append(index, length)}`
+  return `${indent(indention)}@"${field.name}": map${objcClassPrefix(schema)}${field.type}(${fieldPath}.${fieldName})${append(index, length)}`
 }
 
 /*
@@ -68,7 +70,7 @@ const generateMessageMappers = (message: Message, schema: Schema) => {
   return `
 ${arrayOutput.join('\n')}
 
-static inline NSDictionary* map${message.name}(${message.name}* obj) {
+static inline NSDictionary* map${objcClassPrefix(schema)}${message.name}(${objcClassPrefix(schema)}${message.name}* obj) {
   return @{
 ${output.join('\n')}
   };
@@ -96,8 +98,8 @@ const generateRequestMapping = (message: Message, schema: Schema) => {
   }, this)
 
   return `
-static inline ${message.name}* mapToGRPC${message.name}(NSDictionary* input) {
-  ${message.name} *output = [[${message.name} alloc] init];
+static inline ${objcClassPrefix(schema)}${message.name}* mapToGRPC${objcClassPrefix(schema)}${message.name}(NSDictionary* input) {
+  ${objcClassPrefix(schema)}${message.name} *output = [[${objcClassPrefix(schema)}${message.name} alloc] init];
 ${output.join('\n')}
   return output;
 }`.trim()
@@ -105,7 +107,7 @@ ${output.join('\n')}
 
 const generateMethodOutput = (method: Method, schema: Schema, indention) => {
   const output = []
-  output.push(`${indent(indention)}resolve(map${method.output_type}(response));`)
+  output.push(`${indent(indention)}resolve(map${objcClassPrefix(schema)}${method.output_type}(response));`)
 
   return `${output.join('\n')}`
 }
@@ -125,13 +127,13 @@ const generateServiceOutput = (service: Service, schema: Schema) => {
 RCT_EXPORT_METHOD(${camelCase(method.name)}:(NSDictionary *)input
   resolver:(RCTPromiseResolveBlock) resolve
   rejecter:(RCTPromiseRejectBlock) reject) {
-  [_service ${camelCase(method.name)}WithRequest:mapToGRPC${inputMessageType.name}(input) handler:^(${method.output_type} *response, NSError *error) {
+  [_service ${camelCase(method.name)}WithRequest:mapToGRPC${objcClassPrefix(schema)}${inputMessageType.name}(input) handler:^(${objcClassPrefix(schema)}${method.output_type} *response, NSError *error) {
     if (error) {
       reject([@(error.code) stringValue], error.description, error);
       return;
     }
 
-    NSLog(@"native ${method.name}: %@", response);
+    NSLog(@"native ${objcClassPrefix(schema)}${method.name}: %@", response);
 
 ${methodOutput}
   }];
@@ -168,7 +170,7 @@ RCT_EXPORT_MODULE(${moduleName(name)});
 
 export default (schema: Schema) => {
   const output = []
-
+  console.log(schema)
   output.push(generateFileConstructor(schema.services[0].name))
 
   schema.messages.forEach((message) => {

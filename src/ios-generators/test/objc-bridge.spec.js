@@ -11,6 +11,15 @@ it('creates sample output', () => {
   expect(rsp).toMatchSnapshot()
 })
 
+it('creates sample output with classPrefix', () => {
+  const sample = fs.readFileSync(`${__dirname}/../../../test-samples/sample.proto`, 'utf-8')
+  const protoSchema = schema(sample)
+  protoSchema.options['objc_class_prefix'] = 'DRI'
+  const rsp = ios(protoSchema)
+
+  expect(rsp).toMatchSnapshot()
+})
+
 it('creates nested sample output', () => {
   const sample = fs.readFileSync(`${__dirname}/../../../test-samples/nested-output-sample.proto`, 'utf-8')
   const rsp = ios(schema(sample))

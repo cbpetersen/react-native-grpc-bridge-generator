@@ -1,1 +1,1 @@
-./node_modules/.bin/babel-watch index.js test-samples/grpc-service.proto
+./node_modules/.bin/babel-watch index.js test-samples/sample.proto

@@ -347,3 +347,66 @@ RCT_EXPORT_METHOD(reverseGeocode:(NSDictionary *)input
 
 @end"
 `;
+
+exports[`creates sample output with classPrefix 1`] = `
+"#import \\"GrpcServiceBridgeModule.h\\"
+#import <GRPCClient/GRPCCall+Tests.h>
+#import \\"GrpcService.pbrpc.h\\"
+#import <react/RCTConvert.h>
+
+@implementation GrpcServiceBridgeModule
+
+GrpcService *_service;
+
+- (instancetype)initWithHost:(NSString *)host {
+  if (self = [super init]) {
+    [GRPCCall useInsecureConnectionsForHost:host];
+
+    _service = [[GrpcService alloc] initWithHost:host];
+  }
+
+  return self;
+}
+
+RCT_EXPORT_MODULE(GrpcServiceBridgeModule);
+
+static inline NSDictionary* mapDRIReverseGeocodeRequest(DRIReverseGeocodeRequest* obj) {
+  return @{
+    @\\"lat\\": @(obj.lat),
+    @\\"lng\\": @(obj.lng)
+  };
+}
+
+static inline NSDictionary* mapDRILocation(DRILocation* obj) {
+  return @{
+    @\\"lat\\": @(obj.lat),
+    @\\"lng\\": @(obj.lng),
+    @\\"addressString\\": obj.addressString ?: [NSNull null]
+  };
+}
+
+static inline DRIReverseGeocodeRequest* mapToGRPCDRIReverseGeocodeRequest(NSDictionary* input) {
+  DRIReverseGeocodeRequest *output = [[DRIReverseGeocodeRequest alloc] init];
+    output.lat = [[RCTConvert NSNumber:input[@\\"lat\\"]] doubleValue];
+    output.lng = [[RCTConvert NSNumber:input[@\\"lng\\"]] doubleValue];
+  return output;
+}
+
+RCT_EXPORT_METHOD(reverseGeocode:(NSDictionary *)input
+  resolver:(RCTPromiseResolveBlock) resolve
+  rejecter:(RCTPromiseRejectBlock) reject) {
+  [_service reverseGeocodeWithRequest:mapToGRPCDRIReverseGeocodeRequest(input) handler:^(DRILocation *response, NSError *error) {
+    if (error) {
+      reject([@(error.code) stringValue], error.description, error);
+      return;
+    }
+
+    NSLog(@\\"native DRIReverseGeocode: %@\\", response);
+
+    resolve(mapDRILocation(response));
+  }];
+}
+
+
+@end"
+`;

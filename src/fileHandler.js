@@ -39,4 +39,6 @@ export default (protoFile: string) => {
   fs.writeFileSync(`output/js/${jsFileName(protoFileName)}/action-types.js`, actionTypes(fileSchema), {encoding: 'utf-8'})
   fs.writeFileSync(`output/js/${jsFileName(protoFileName)}/api-client.js`, apiClient(fileSchema), {encoding: 'utf-8'})
   fs.writeFileSync(`output/js/${jsFileName(protoFileName)}/index.js`, indexGen(fileSchema), {encoding: 'utf-8'})
+
+  console.log(iosBridgeFile)
 }
