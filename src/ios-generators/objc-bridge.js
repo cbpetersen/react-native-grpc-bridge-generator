@@ -7,7 +7,6 @@ import type { Field, Schema, Message, Method, Service } from '../types'
 
 const arrayMappers = {}
 
-
 const generateFieldOutput = (field: Field, schema: Schema, fieldPath: string, indention, index, length) => {
   const fieldName = mapReservedKeyword(field.name)
 

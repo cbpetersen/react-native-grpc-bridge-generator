@@ -52,5 +52,6 @@ export type Schema = {
   imports: Array<any>,
   enums: Array<Enum>,
   messages: Array<Message>,
-  services: Array<Service>
+  services: Array<Service>,
+  options: Object
 }
