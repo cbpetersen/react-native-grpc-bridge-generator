@@ -1,15 +1,13 @@
 // @flow
 
-import { actionCreatorName, actionCreatorRequestName, actionCreatorSuccessName, actionCreatorFailedName } from '../utils'
+import { actionCreatorName, actionCreatorRequestName } from '../utils'
 import type { Schema } from '../types'
 
 export const generateActionCreator = (name: string, type: string) =>
 `
 export const ${actionCreatorName(name)} = (payload: ${type}) => ({
   meta: {
-    delivery: 'grpc',
-    successType: '${actionCreatorSuccessName(name)}',
-    failureType: '${actionCreatorFailedName(name)}'
+    delivery: 'grpc'
   },
   type: '${actionCreatorRequestName(name)}',
   payload

@@ -3,9 +3,7 @@
 exports[`generateActionCreator creates a repeated type definition 1`] = `
 "export const getUser = (payload: GetUser) => ({
   meta: {
-    delivery: 'grpc',
-    successType: 'GET_USER_GRPC_SUCCESS',
-    failureType: 'GET_USER_GRPC_FAILED'
+    delivery: 'grpc'
   },
   type: 'GET_USER_GRPC_REQUEST',
   payload
@@ -21,9 +19,7 @@ import type { ReverseGeocodeRequest } from './SpiriGrpcServiceBridgeModule-flow-
 
 export const reverseGeocode = (payload: ReverseGeocodeRequest) => ({
   meta: {
-    delivery: 'grpc',
-    successType: 'REVERSE_GEOCODE_GRPC_SUCCESS',
-    failureType: 'REVERSE_GEOCODE_GRPC_FAILED'
+    delivery: 'grpc'
   },
   type: 'REVERSE_GEOCODE_GRPC_REQUEST',
   payload
