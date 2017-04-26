@@ -7,12 +7,14 @@ describe('generateFlowType', () => {
     const rsp = generateFlowType('Empty', '')
 
     expect(rsp).toMatchSnapshot()
+    expect(rsp).not.toContain('undefined')
   })
 
   it('creates an flow type definition', () => {
     const rsp = generateFlowType('Empty', '  name: string')
 
     expect(rsp).toMatchSnapshot()
+    expect(rsp).not.toContain('undefined')
   })
 })
 
@@ -25,6 +27,7 @@ describe('generateField', () => {
     const rsp = generateField(field, 2, 1, 1)
 
     expect(rsp).toMatchSnapshot()
+    expect(rsp).not.toContain('undefined')
   })
 
   it('creates a repeated primitive value definition', () => {
@@ -36,6 +39,7 @@ describe('generateField', () => {
     const rsp = generateField(field, 2, 1, 1)
 
     expect(rsp).toMatchSnapshot()
+    expect(rsp).not.toContain('undefined')
   })
 
   it('creates a type definition', () => {
@@ -46,6 +50,7 @@ describe('generateField', () => {
     const rsp = generateField(field, 2, 1, 1)
 
     expect(rsp).toMatchSnapshot()
+    expect(rsp).not.toContain('undefined')
   })
 
   it('creates a repeated type definition', () => {
@@ -57,6 +62,7 @@ describe('generateField', () => {
     const rsp = generateField(field, 2, 1, 1)
 
     expect(rsp).toMatchSnapshot()
+    expect(rsp).not.toContain('undefined')
   })
 })
 
@@ -78,6 +84,7 @@ describe('messageMapper', () => {
     const rsp = messageMapper(message)
 
     expect(rsp).toMatchSnapshot()
+    expect(rsp).not.toContain('undefined')
   })
 })
 
@@ -108,5 +115,6 @@ describe('generator', () => {
     const rsp = generator(schema)
 
     expect(rsp).toMatchSnapshot()
+    expect(rsp).not.toContain('undefined')
   })
 })

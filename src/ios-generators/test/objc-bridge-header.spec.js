@@ -6,4 +6,5 @@ it('creates header output', () => {
   const rsp = iosHeader('FunService')
 
   expect(rsp).toMatchSnapshot()
+  expect(rsp).not.toContain('undefined')
 })

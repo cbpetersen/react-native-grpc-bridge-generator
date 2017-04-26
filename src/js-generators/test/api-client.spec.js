@@ -7,6 +7,7 @@ describe('generateActionCreator', () => {
     const rsp = generateActionCreator('ReverseGeocode', 'ReverseGeocodeRequest', 'Location')
 
     expect(rsp).toMatchSnapshot()
+    expect(rsp).not.toContain('undefined')
   })
 })
 
@@ -15,6 +16,7 @@ describe('generateFileHeader', () => {
     const rsp = generateFileHeader()
 
     expect(rsp).toMatchSnapshot()
+    expect(rsp).not.toContain('undefined')
   })
 })
 
@@ -36,5 +38,6 @@ describe('generator', () => {
     const rsp = generator(schema)
 
     expect(rsp).toMatchSnapshot()
+    expect(rsp).not.toContain('undefined')
   })
 })

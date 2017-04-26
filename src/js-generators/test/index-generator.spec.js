@@ -7,6 +7,7 @@ describe('template', () => {
     const rsp = template('ServiceName123')
 
     expect(rsp).toMatchSnapshot()
+    expect(rsp).not.toContain('undefined')
   })
 })
 
@@ -28,5 +29,6 @@ describe('generator', () => {
     const rsp = generator(schema)
 
     expect(rsp).toMatchSnapshot()
+    expect(rsp).not.toContain('undefined')
   })
 })
