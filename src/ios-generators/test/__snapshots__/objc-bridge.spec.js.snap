@@ -3,7 +3,7 @@
 exports[`creates multiple nested messages sample output 1`] = `
 "#import \\"GrpcServiceBridgeModule.h\\"
 #import <GRPCClient/GRPCCall+Tests.h>
-#import \\"GrpcService.pbrpc.h\\"
+#import \\"sample.pbrpc.h\\"
 #import <react/RCTConvert.h>
 
 @implementation GrpcServiceBridgeModule
@@ -107,7 +107,7 @@ RCT_EXPORT_METHOD(searchLocations:(NSDictionary *)input
 exports[`creates multiple service sample output 1`] = `
 "#import \\"GrpcServiceBridgeModule.h\\"
 #import <GRPCClient/GRPCCall+Tests.h>
-#import \\"GrpcService.pbrpc.h\\"
+#import \\"sample.pbrpc.h\\"
 #import <react/RCTConvert.h>
 
 @implementation GrpcServiceBridgeModule
@@ -207,7 +207,7 @@ RCT_EXPORT_METHOD(searchLocations:(NSDictionary *)input
 exports[`creates nested sample output 1`] = `
 "#import \\"GrpcServiceBridgeModule.h\\"
 #import <GRPCClient/GRPCCall+Tests.h>
-#import \\"GrpcService.pbrpc.h\\"
+#import \\"sample.pbrpc.h\\"
 #import <react/RCTConvert.h>
 
 @implementation GrpcServiceBridgeModule
@@ -288,7 +288,7 @@ RCT_EXPORT_METHOD(searchPlaces:(NSDictionary *)input
 exports[`creates sample output 1`] = `
 "#import \\"GrpcServiceBridgeModule.h\\"
 #import <GRPCClient/GRPCCall+Tests.h>
-#import \\"GrpcService.pbrpc.h\\"
+#import \\"sample.pbrpc.h\\"
 #import <react/RCTConvert.h>
 
 @implementation GrpcServiceBridgeModule
@@ -351,18 +351,18 @@ RCT_EXPORT_METHOD(reverseGeocode:(NSDictionary *)input
 exports[`creates sample output with classPrefix 1`] = `
 "#import \\"GrpcServiceBridgeModule.h\\"
 #import <GRPCClient/GRPCCall+Tests.h>
-#import \\"GrpcService.pbrpc.h\\"
+#import \\"sample.pbrpc.h\\"
 #import <react/RCTConvert.h>
 
 @implementation GrpcServiceBridgeModule
 
-GrpcService *_service;
+DRIGrpcService *_service;
 
 - (instancetype)initWithHost:(NSString *)host {
   if (self = [super init]) {
     [GRPCCall useInsecureConnectionsForHost:host];
 
-    _service = [[GrpcService alloc] initWithHost:host];
+    _service = [[DRIGrpcService alloc] initWithHost:host];
   }
 
   return self;

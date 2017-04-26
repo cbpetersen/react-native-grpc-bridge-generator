@@ -1,6 +1,7 @@
 // @flow
 
 import fs from 'fs'
+import path from 'path'
 import del from 'del'
 import schema from 'protocol-buffers-schema'
 
@@ -18,8 +19,9 @@ import { fileName, jsFileName } from './utils'
 export default (protoFile: string) => {
   const file = fs.readFileSync(protoFile, 'utf-8')
   const fileSchema = schema.parse(file)
+  const realProtoFileName = path.parse(protoFile).name
   const protoFileName = fileSchema.services[0].name
-  const iosBridgeFile = ios(fileSchema)
+  const iosBridgeFile = ios(fileSchema, realProtoFileName)
   const iosBridgeHeaderFile = iosHeaderCreator(protoFileName)
 
   if (!fs.existsSync('output')) {

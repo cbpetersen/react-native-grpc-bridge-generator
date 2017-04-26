@@ -145,33 +145,33 @@ ${methodOutput}
   return output.join('\n')
 }
 
-const generateFileConstructor = (name: string) => `
-#import "${moduleName(name)}.h"
+const generateFileConstructor = (classPrefixName: string, fileName: string, serviceName: string) => `
+#import "${moduleName(serviceName)}.h"
 #import <GRPCClient/GRPCCall+Tests.h>
-#import "${name}.pbrpc.h"
+#import "${fileName}.pbrpc.h"
 #import <react/RCTConvert.h>
 
-@implementation ${moduleName(name)}
+@implementation ${moduleName(serviceName)}
 
-${name} *_service;
+${classPrefixName}${serviceName} *_service;
 
 - (instancetype)initWithHost:(NSString *)host {
   if (self = [super init]) {
     [GRPCCall useInsecureConnectionsForHost:host];
 
-    _service = [[${name} alloc] initWithHost:host];
+    _service = [[${classPrefixName}${serviceName} alloc] initWithHost:host];
   }
 
   return self;
 }
 
-RCT_EXPORT_MODULE(${moduleName(name)});
+RCT_EXPORT_MODULE(${moduleName(serviceName)});
 \n`.trim()
 
-export default (schema: Schema) => {
+export default (schema: Schema, fileName: string) => {
   const output = []
   console.log(schema)
-  output.push(generateFileConstructor(schema.services[0].name))
+  output.push(generateFileConstructor(objcClassPrefix(schema), fileName, schema.services[0].name))
 
   schema.messages.forEach((message) => {
     output.push(generateMessageMappers(message, schema))
