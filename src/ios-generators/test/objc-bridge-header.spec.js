@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import iosHeader from '../objective-c-header-creator'
+import iosHeader from '../objc-bridge-header'
 
 it('creates header output', () => {
   const rsp = iosHeader('FunService')

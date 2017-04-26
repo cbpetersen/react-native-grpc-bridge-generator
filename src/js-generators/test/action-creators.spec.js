@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import generator, { generateFileHeader, generateActionCreator } from '../react-action-creator-generator'
+import generator, { generateFileHeader, generateActionCreator } from '../action-creators'
 
 describe('generateActionCreator', () => {
   it('creates a repeated type definition', () => {

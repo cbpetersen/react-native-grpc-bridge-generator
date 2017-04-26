@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import generator, { generateFlowType, generateField, messageMapper } from '../flow-type-generator'
+import generator, { generateFlowType, generateField, messageMapper } from '../flow-types'
 
 describe('generateFlowType', () => {
   it('creates an empty flow type definition', () => {

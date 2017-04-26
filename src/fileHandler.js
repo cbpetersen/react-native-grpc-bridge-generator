@@ -4,14 +4,15 @@ import fs from 'fs'
 import del from 'del'
 import schema from 'protocol-buffers-schema'
 
-import iosHeaderCreator from './ios-generators/objective-c-header-creator'
-import ios from './ios-generators/objective-c-parser'
-import flowTypes from './js-generators/flow-type-generator'
+import iosHeaderCreator from './ios-generators/objc-bridge-header'
+import ios from './ios-generators/objc-bridge'
 
-import reactActionCreators from './js-generators/react-action-creator-generator'
-import actionTypes from './js-generators/react-action-types-generator'
-import apiClient from './js-generators/react-native-api-client-generator'
+import flowTypes from './js-generators/flow-types'
+import reactActionCreators from './js-generators/action-creators'
+import actionTypes from './js-generators/action-types'
+import apiClient from './js-generators/api-client'
 import indexGen from './js-generators/index-generator'
+
 import { fileName, jsFileName } from './utils'
 
 export default (protoFile: string) => {

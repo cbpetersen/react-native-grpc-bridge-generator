@@ -1,17 +1,17 @@
 /* eslint-env jest */
 
-import generator, { generateFileHeader, generateActionCreator } from '../react-action-types-generator'
+import generator, { generateFileHeader, generateActionCreator } from '../api-client'
 
 describe('generateActionCreator', () => {
-  it('creates a repeated type definition', () => {
-    const rsp = generateActionCreator('GetUser', 'GetUser')
+  it('a api function', () => {
+    const rsp = generateActionCreator('ReverseGeocode', 'ReverseGeocodeRequest', 'Location')
 
     expect(rsp).toMatchSnapshot()
   })
 })
 
 describe('generateFileHeader', () => {
-  it('creates a flow type definition', () => {
+  it('creates a file definition', () => {
     const rsp = generateFileHeader()
 
     expect(rsp).toMatchSnapshot()
