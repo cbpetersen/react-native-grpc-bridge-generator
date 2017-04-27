@@ -1,6 +1,14 @@
+#!/usr/bin/env babel-node
+
 // @flow
 
-import { argv } from 'yargs'
-import fileHandler from './src/fileHandler'
+require('babel-register')({
+  ignore: /node_modules\/(?!protobuf-to-react-native-bridge-bindings)/
+})
+var argv = require('yargs')
+    .count('verbose')
+    .alias('v', 'verbose').argv
 
-fileHandler(argv._[0])
+var fileHandler = require('./src/fileHandler')
+
+fileHandler(argv)
