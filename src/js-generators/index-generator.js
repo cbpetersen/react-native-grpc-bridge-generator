@@ -1,4 +1,7 @@
 // @flow
+
+import camelcase from 'lodash.camelcase'
+
 import type { Schema } from '../types'
 
 export const template = (serviceName: string) => `
@@ -8,13 +11,13 @@ import * as actions from './actions'
 import * as actionTypes from './action-types'
 import * as apiClient from './api-client'
 
-const ${serviceName} = {
+const ${camelcase(serviceName)} = {
   actions,
   actionTypes,
   apiClient
 }
 
-module.exports = ${serviceName}
+module.exports = ${camelcase(serviceName)}
 
 `.trim()
 

@@ -7,13 +7,13 @@ import * as actions from './actions'
 import * as actionTypes from './action-types'
 import * as apiClient from './api-client'
 
-const GrpcService = {
+const grpcService = {
   actions,
   actionTypes,
   apiClient
 }
 
-module.exports = GrpcService"
+module.exports = grpcService"
 `;
 
 exports[`template creates template 1`] = `
@@ -23,11 +23,11 @@ import * as actions from './actions'
 import * as actionTypes from './action-types'
 import * as apiClient from './api-client'
 
-const ServiceName123 = {
+const serviceName123 = {
   actions,
   actionTypes,
   apiClient
 }
 
-module.exports = ServiceName123"
+module.exports = serviceName123"
 `;
