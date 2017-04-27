@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator creates index 1`] = `
+"// @flow
+
+const locations = require('./locations')
+const booking = require('./booking')
+const pricing = require('./pricing')
+
+module.exports = {
+  locations: locations,
+  booking: booking,
+  pricing: pricing
+}"
+`;

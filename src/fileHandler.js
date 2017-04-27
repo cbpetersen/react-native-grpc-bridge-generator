@@ -13,6 +13,7 @@ import reactActionCreators from './js-generators/action-creators'
 import actionTypes from './js-generators/action-types'
 import apiClient from './js-generators/api-client'
 import indexGen from './js-generators/index-generator'
+import rootIndex from './js-generators/root-index'
 
 import { fileName, jsFileName, objcClassPrefix } from './utils'
 
@@ -40,6 +41,8 @@ const processDirectory = (directoryPathString:string) => {
   files.forEach(file => {
     processFile(path.join(directoryPathString, file))
   })
+
+  fs.writeFileSync(`output/js/index.js`, rootIndex(files.map(file => jsFileName(path.parse(file).name))), {encoding: 'utf-8'})
 }
 
 export default (pathString: string) => {
@@ -52,5 +55,6 @@ export default (pathString: string) => {
     return processDirectory(pathString)
   }
 
-  return processFile(pathString)
+  processFile(pathString)
+  fs.writeFileSync(`output/js/index.js`, rootIndex(jsFileName(path.parse(pathString).name)), {encoding: 'utf-8'})
 }
