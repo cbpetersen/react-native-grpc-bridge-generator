@@ -37,7 +37,7 @@ const processFile = (filePathString: string) => {
 }
 
 const processDirectory = (directoryPathString:string) => {
-  const files = fs.readdirSync(directoryPathString)
+  const files = fs.readdirSync(directoryPathString).filter(file => file.endsWith('.proto'))
   files.forEach(file => {
     processFile(path.join(directoryPathString, file))
   })
